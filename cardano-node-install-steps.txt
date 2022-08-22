@@ -1,0 +1,98 @@
+### Install/Upgrade FROM source: ###
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt install vim htop inetutils-ping -y
+sudo apt autoremove -y
+
+sudo apt-get install automake build-essential pkg-config libffi-dev libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev make g++ tmux git jq wget libncursesw5 libtool autoconf liblmdb-dev -y
+
+sudo apt-get install curl libffi7 libgmp10 libncurses-dev libncurses5 libtinfo5 -y
+
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+
+source ~/.bashrc
+
+ghcup install ghc 8.10.7
+ghcup install cabal 3.6.2.0
+ghcup set ghc 8.10.7
+ghcup set cabal 3.6.2.0
+
+mkdir -p ~/src
+cd ~/src
+
+git clone https://github.com/input-output-hk/libsodium
+cd libsodium
+git checkout 66f017f1
+./autogen.sh
+./configure
+make
+sudo make install
+
+vi ~/.bashrc
+export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+source ~/.bashrc
+
+sudo apt install libsodium-dev
+
+cd ~/src
+git clone https://github.com/bitcoin-core/secp256k1
+cd secp256k1
+git checkout ac83be33
+./autogen.sh
+./configure --enable-module-schnorrsig --enable-experimental
+make
+sudo make install
+
+cd ~/src
+git clone https://github.com/input-output-hk/cardano-node.git
+cd cardano-node
+git fetch --all --recurse-submodules --tags
+git tag
+git checkout tags/1.35.3
+
+echo "with-compiler: ghc-8.10.7" >> cabal.project.local
+cabal build all
+
+sudo cp -p "$(./scripts/bin-path.sh cardano-node)" /usr/local/bin/
+sudo cp -p "$(./scripts/bin-path.sh cardano-cli)" /usr/local/bin/
+
+cardano-cli --version
+cardano-node --version
+
+cd ~/src
+curl -sS -o prereqs.sh https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/prereqs.sh
+chmod 755 prereqs.sh 
+./prereqs.sh #DOES NOT OVERWRITE CONF FILES
+OR
+./prereqs.sh -f -s -c #CREATES NEW CONF FILES NODE
+. "${HOME}/.bashrc"
+
+
+cd $CNODE_HOME/scripts
+or
+cd /opt/cardano/cnode/scripts 
+open env file and change the CNODE_PORT (by default is 6000 but perhaps you will want to use another ports)
+nano env
+CNODE_PORT=6000 
+save the file
+Ctrl+x  y  Enter 
+set up the node to start as systemd (this means that if your server will crash or it will reboot, the node/process will start automatically);
+!!! remember that all scripts are located inside the scripts folder
+
+./deploy-as-systemd.sh
+IMPORTANT to know when you run ./deploy-as-systemd.sh :
+It will ask also to set the topologyupdater process as systemd and you will:
+
+for Producer press NO for topologyUpdater
+
+for Relay press YES for topologyUpdater, let the default timer for cnode auto restart to 86400
+
+restart the node and check the status:
+
+sudo systemctl restart cnode
+sudo systemctl status cnode
+
+
+### Upgrade FROM source: (END) ###
