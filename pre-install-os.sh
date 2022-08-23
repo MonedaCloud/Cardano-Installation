@@ -15,4 +15,4 @@ curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
 . "${HOME}/.bashrc"
 
-sudo reboot
+echo 'Run source ~/.bashrc on the terminal before proceeding to nest step.'
