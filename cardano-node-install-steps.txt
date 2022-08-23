@@ -1,3 +1,5 @@
+# Installing/Updating Cardano Node
+
 ### Pre Cardano Node OS Install/Upgrade FROM source: 1 OF 3 ###
 
 sudo apt update
@@ -99,3 +101,9 @@ export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node0.socket"
 export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
 . "${HOME}/.bashrc"
 echo 'END'
+
+## References:
+
+https://developers.cardano.org/docs/get-started/installing-cardano-node/
+
+https://github.com/input-output-hk/cardano-node/blob/master/doc/getting-started/install.md#using-the-ported-c-code
