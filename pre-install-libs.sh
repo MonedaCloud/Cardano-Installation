@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ### Cardano Node Libs FROM source: 2 OF 3 ###
-### Run first pre-installCardanoNode.sh script. ###
+### Run first pre-install-os.sh script. ###
 
 ghcup install ghc 8.10.7
 ghcup install cabal 3.6.2.0
