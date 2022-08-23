@@ -19,6 +19,7 @@ git checkout 66f017f1
 make
 sudo make install
 
+echo " " >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
 echo 'export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.bashrc
 export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
@@ -45,4 +46,5 @@ chmod 755 prereqs.sh
 #NODE - INSTALLS CNCLI
 #./prereqs.sh -f -s -c
 . "${HOME}/.bashrc"
-echo 'END'
+
+echo 'Run source ~/.bashrc on the terminal before proceeding to nest step.'
