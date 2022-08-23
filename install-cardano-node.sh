@@ -33,6 +33,7 @@ echo 'alias env=/usr/bin/env
 alias cntools=/opt/cardano/cnode/scripts/cntools.sh
 alias gLiveView=/opt/cardano/cnode/scripts/gLiveView.sh
 export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node0.socket"
+export PATH="/opt/cardano/cnode/scripts:/$HOME/.cabal/bin:$PATH"
 export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
 . "${HOME}/.bashrc"
 echo 'END'
