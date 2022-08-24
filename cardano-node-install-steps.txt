@@ -2,57 +2,57 @@
 
 ### Pre Cardano Node OS Install/Upgrade FROM source: 1 OF 3 ###
 
-`sudo apt update`
-`sudo apt upgrade -y`
-`sudo apt install vim htop inetutils-ping -y`
-`sudo apt autoremove -y`
+sudo apt update
+sudo apt upgrade -y
+sudo apt install vim htop inetutils-ping -y
+sudo apt autoremove -y
 
-`sudo apt-get install automake build-essential pkg-config libffi-dev libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev make g++ tmux git jq wget libncursesw5 libtool autoconf liblmdb-dev -y`
+sudo apt-get install automake build-essential pkg-config libffi-dev libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev make g++ tmux git jq wget libncursesw5 libtool autoconf liblmdb-dev -y
 
-`sudo apt-get install curl libffi7 libgmp10 libncurses-dev libncurses5 libtinfo5 -y`
+sudo apt-get install curl libffi7 libgmp10 libncurses-dev libncurses5 libtinfo5 -y
 
-`curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh`
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
-`. "${HOME}/.bashrc"`
+. "${HOME}/.bashrc"
 
 
 ### Cardano Node Libs FROM source: 2 OF 3 ###
 ### Run first pre-installCardanoNode.sh script. ###
 
-`ghcup install ghc 8.10.7`
-`ghcup install cabal 3.6.2.0`
-`ghcup set ghc 8.10.7`
-`ghcup set cabal 3.6.2.0`
+ghcup install ghc 8.10.7
+ghcup install cabal 3.6.2.0
+ghcup set ghc 8.10.7
+ghcup set cabal 3.6.2.0
 
-`mkdir -p ~/src`
+mkdir -p ~/src
 
-`cd ~/src
+cd ~/src
 git clone https://github.com/input-output-hk/libsodium
 cd libsodium
 git checkout 66f017f1
 ./autogen.sh
 ./configure
 make
-sudo make install`
+sudo make install
 
-'echo " " >> ~/.bashrc
+echo " " >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
 echo 'export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.bashrc
-. "${HOME}/.bashrc"`
+. "${HOME}/.bashrc"
 
-`sudo apt install libsodium-dev`
+sudo apt install libsodium-dev
 
-`cd ~/src
+cd ~/src
 git clone https://github.com/bitcoin-core/secp256k1
 cd secp256k1
 git checkout ac83be33
 ./autogen.sh
 ./configure --enable-module-schnorrsig --enable-experimental
 make
-sudo make install`
+sudo make install
 
 
-`cd ~/src
+cd ~/src
 curl -sS -o prereqs.sh https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/prereqs.sh
 chmod 755 prereqs.sh
 # If upgrading, DO NOT use -f option. It will overwrite configuration files.
@@ -61,7 +61,7 @@ chmod 755 prereqs.sh
 #NODE - INSTALLS CNCLI
 #./prereqs.sh -f -s -c
 . "${HOME}/.bashrc"
-echo 'END'`
+echo 'END'
 
 ### Cardano Node Build/Install FROM source: 3 OF 3 ###
 ### Run first pre-installCardanoNode.sh script. ###
@@ -69,36 +69,34 @@ echo 'END'`
 
 CNODE_VERSION="1.35.3"
 
-`mkdir -p ~/src`
-
-`cd ~/src
+cd ~/src
 git clone https://github.com/input-output-hk/cardano-node.git
 cd cardano-node
 git fetch --tags --all
 git checkout tags/$CNODE_VERSION
 echo "with-compiler: ghc-8.10.7" >> cabal.project.local
-cabal build all`
+cabal build all
 
-`mkdir -p ~/.local/bin
+mkdir -p ~/.local/bin
 cp -p "$(./scripts/bin-path.sh cardano-node)" ~/.local/bin/
 cp -p "$(./scripts/bin-path.sh cardano-cli)" ~/.local/bin/
 echo 'export PATH="$HOME/.local/bin/:$PATH"' >> ~/.bashrc
 export PATH="$HOME/.local/bin/:$PATH"
-. "${HOME}/.bashrc"`
+. "${HOME}/.bashrc"
 
-`cardano-cli --version
-cardano-node --version`
+cardano-cli --version
+cardano-node --version
 
-`cd /opt/cardano/cnode/scripts
-./deploy-as-systemd.sh`
+cd /opt/cardano/cnode/scripts
+./deploy-as-systemd.sh
 
-`echo 'alias env=/usr/bin/env
+echo 'alias env=/usr/bin/env
 alias cntools=/opt/cardano/cnode/scripts/cntools.sh
 alias gLiveView=/opt/cardano/cnode/scripts/gLiveView.sh
 export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node0.socket"
 export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
 . "${HOME}/.bashrc"
-echo 'END'`
+echo 'END'
 
 ## References:
 
