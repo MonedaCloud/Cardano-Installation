@@ -3,6 +3,9 @@
 ### Cardano Node Libs FROM source: 2 OF 3 ###
 ### Run first pre-install-os.sh script. ###
 
+# Values: RELAY|NODE|UPDATE
+$MODE='RELAY'
+
 ghcup install ghc 8.10.7
 ghcup install cabal 3.6.2.0
 ghcup set ghc 8.10.7
@@ -42,10 +45,21 @@ cd ~/src
 curl -sS -o prereqs.sh https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/prereqs.sh
 chmod 755 prereqs.sh
 # If upgrading, DO NOT use -f option. It will overwrite configuration files.
+if [ $MODE = 'RELAY' ]
+then
 #RELAY
 ./prereqs.sh -f -s
+elif [ $MODE == 'NODE' ]
+then
 #NODE - INSTALLS CNCLI
-#./prereqs.sh -f -s -c
+./prereqs.sh -f -s -c
+elif [ $MODE == 'UPGRADE' ]
+./prereqs.sh -s
+fi
+else
+echo "MODE: RELAY|NODE|UPDATE"
+fi
+
 . "${HOME}/.bashrc"
 
 echo 'Run source ~/.bashrc on the terminal before proceeding to nest step.'
