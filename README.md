@@ -18,6 +18,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 5. terminal:~$ `./install-cardano-node.sh`
 6. Configure env, cnode.sh, topologyUpdater.sh (Relay Only), topology.json (Node Only).
 7. terminal:~$ `sudo reboot`
+* Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
 **Note:** These steps were sucessfully tested on Mainnet with Cardano node version **1.35.3** (Vasil).
 
