@@ -58,10 +58,11 @@ chmod 755 prereqs.sh
 # If upgrading, DO NOT use -f option. It will overwrite configuration files.
 #RELAY
 ./prereqs.sh -f -s
+
 #NODE - INSTALLS CNCLI
 #./prereqs.sh -f -s -c
+
 . "${HOME}/.bashrc"
-echo 'END'
 
 ### Cardano Node Build/Install FROM source: 3 OF 3 ###
 ### Run first pre-installCardanoNode.sh script. ###
