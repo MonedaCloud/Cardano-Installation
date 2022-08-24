@@ -12,12 +12,12 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 - The below steps assumes you already have a dedicated user named cardano with sudo privileges running on Ubuntu 20.04:
 1. terminal:~$ `./pre-install-os.sh`
-2. terminal:~$ ~/.bashrc
-3. terminal:~$ ./pre-install-libs.sh
-4. terminal:~$ ~/.bashrc
-5. terminal:~$ ./install-cardano-node.sh
+2. terminal:~$ `source ~/.bashrc`
+3. terminal:~$ `./pre-install-libs.sh`
+4. terminal:~$ `source ~/.bashrc`
+5. terminal:~$ `./install-cardano-node.sh`
 6. Configure env, cnode.sh, topologyUpdater.sh (Relay Only), topology.json (Node Only).
-7. terminal:~$ sudo reboot
+7. terminal:~$ `sudo reboot`
 
 
 #### References:
