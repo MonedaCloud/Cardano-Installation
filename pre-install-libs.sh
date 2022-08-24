@@ -44,7 +44,7 @@ sudo make install
 cd ~/src
 curl -sS -o prereqs.sh https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/prereqs.sh
 chmod 755 prereqs.sh
-# If upgrading, DO NOT use -f option. It will overwrite configuration files.
+
 if [ $MODE = 'RELAY' ]
 then
 #RELAY
@@ -57,6 +57,7 @@ elif [ $MODE == 'UPGRADE' ]
 ./prereqs.sh -s
 fi
 else
+# UPGRADE
 echo "MODE: RELAY|NODE|UPDATE"
 fi
 
