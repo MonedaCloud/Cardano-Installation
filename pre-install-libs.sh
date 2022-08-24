@@ -45,21 +45,23 @@ cd ~/src
 curl -sS -o prereqs.sh https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/prereqs.sh
 chmod 755 prereqs.sh
 
-if [ $MODE = 'RELAY' ]
-then
+case $MODE in
+'RELAY')
 #RELAY
 ./prereqs.sh -f -s
-elif [ $MODE == 'NODE' ]
-then
+;;
+'NODE')
 #NODE - INSTALLS CNCLI
 ./prereqs.sh -f -s -c
-elif [ $MODE == 'UPGRADE' ]
+;;
+'UPDATE')
+#UPGRADE
 ./prereqs.sh -s
-fi
-else
-# UPGRADE
+;;
+*)
 echo "MODE: RELAY|NODE|UPDATE"
-fi
+;;
+esac
 
 . "${HOME}/.bashrc"
 
