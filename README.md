@@ -6,7 +6,7 @@ This repo contains scripts and installation steps for Cardano node as block prod
 
 ### Option 1:
 
-- Install it all manually step by step uisng cardano-node-install-steps.txt.
+- Install it all manually step by step using cardano-node-install-steps.txt.
 
 ### Option 2: (Recomended)
 
