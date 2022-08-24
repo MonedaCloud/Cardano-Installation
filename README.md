@@ -18,3 +18,10 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 5. terminal:~$ ./install-cardano-node.sh
 6. Configure env, cnode.sh, topologyUpdater.sh (Relay Only), topology.json (Node Only).
 7. terminal:~$ sudo reboot
+
+
+#### References:
+
+https://developers.cardano.org/docs/get-started/installing-cardano-node/
+
+https://github.com/input-output-hk/cardano-node/blob/master/doc/getting-started/install.md#using-the-ported-c-code
