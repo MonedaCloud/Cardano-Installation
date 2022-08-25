@@ -4,7 +4,12 @@
 ### Run first pre-install-os.sh script. ###
 
 # Values: RELAY|NODE|UPDATE
-$MODE='RELAY'
+MODE='RELAY'
+# Values: mainnet|testnet
+NETWORK='mainnet'
+
+
+### DO NOT CHANGE CODE BELOW. ###
 
 ghcup install ghc 8.10.7
 ghcup install cabal 3.6.2.0
@@ -45,24 +50,27 @@ cd ~/src
 curl -sS -o prereqs.sh https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/prereqs.sh
 chmod 755 prereqs.sh
 
-case $MODE in
+case "$MODE" in
 'RELAY')
 #RELAY
-./prereqs.sh -f -s
+echo "1. Setting up $MODE on $NETWORK"
+./prereqs.sh -n "$NETWORK" -f -s
 ;;
 'NODE')
 #NODE - INSTALLS CNCLI
-./prereqs.sh -f -s -c
+echo "2. Setting up $MODE on $NETWORK"
+./prereqs.sh -n "$NETWORK" -f -s -c
 ;;
 'UPDATE')
 #UPGRADE
-./prereqs.sh -s
+echo "3. Setting up $MODE on $NETWORK"
+./prereqs.sh -n "$NETWORK" -s
 ;;
 *)
-echo "MODE: RELAY|NODE|UPDATE"
+echo "MODE: RELAY|NODE|UPDATE \n NETWORK: mainnet|testnet"
 ;;
 esac
 
 . "${HOME}/.bashrc"
 
-echo 'Run source ~/.bashrc on the terminal before proceeding to nest step.'
+echo 'Run [ source ~/.bashrc ] on the terminal before proceeding to nest step.'
