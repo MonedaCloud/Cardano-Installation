@@ -11,6 +11,9 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 ### Option 2: (Recomended)
 
 - The below steps assumes you already have a dedicated user named **cardano** with sudo privileges running on Ubuntu 20.04:
+
+terminal:~$ `chmod +x *install*.sh`
+
 1. terminal:~$ `./pre-install-os.sh`
 2. terminal:~$ `source ~/.bashrc`
 3. terminal:~$ `./pre-install-libs.sh`
@@ -28,7 +31,8 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 - Verify CNODE_VERSION="1.35.X" line has the correct release version.
 - DO NOT run below comand as sudo, the prompt will ask for sudo credentials by itself.
 
-terminal:~$ `./upgrade-cardano-node.sh`
+1. terminal:~$ `chmod +x upgrade-cardano-node.sh`
+2. terminal:~$ `./upgrade-cardano-node.sh`
 
 #### References:
 
