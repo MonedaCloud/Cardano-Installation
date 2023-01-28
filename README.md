@@ -20,7 +20,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 7. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
-**Note:** These steps were successfully tested on Mainnet with Cardano node version **1.35.3** (Vasil).
+**Note:** These steps were successfully tested on Mainnet with Cardano node version **1.35.3/4/5** (Vasil).
 
 
 #### References:
