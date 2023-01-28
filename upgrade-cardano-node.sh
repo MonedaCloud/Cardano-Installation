@@ -4,7 +4,7 @@
 ### Run first pre-installCardanoNode.sh script. ###
 ### Run second installCardanoNodeLibs.sh script. ###
 
-CNODE_VERSION="1.35.4"
+CNODE_VERSION="1.35.5"
 
 #Patch OS - Optional
 sudo apt update
