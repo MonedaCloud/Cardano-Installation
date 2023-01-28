@@ -12,8 +12,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 - The below steps assumes you already have a dedicated user named **cardano** with sudo privileges running on Ubuntu 20.04:
 
-terminal:~$ `chmod +x *install*.sh`
-
+0. terminal:~$ `chmod +x *install*.sh`
 1. terminal:~$ `./pre-install-os.sh`
 2. terminal:~$ `source ~/.bashrc`
 3. terminal:~$ `./pre-install-libs.sh`
