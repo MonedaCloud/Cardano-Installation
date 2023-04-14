@@ -1,4 +1,4 @@
-# Cardano-Node-Installation
+# Cardano Node Installation
 
 This repo contains scripts and installation steps for Cardano node as a block producer and relay.
 
@@ -24,7 +24,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 **Note:** These steps were successfully tested on Mainnet with Cardano node version **1.35.3/4/5/6/7** (Vasil). This steps are the same for Producer nodes and Relay nodes.
 
-# Cardano-Node-Upgrading
+# Cardano Node-Upgrading
 
 - The below steps assumes you already have a dedicated user named **cardano** with sudo privileges running on Ubuntu 20.04:
 - Verify CNODE_VERSION="1.35.X" line has the correct release version number.
@@ -34,7 +34,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 2. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="1.35.X" line with the correct version number.)
 3. terminal:~$ `./upgrade-cardano-node.sh`
 
-#### References:
+## References:
 
 https://developers.cardano.org/docs/get-started/installing-cardano-node/
 
