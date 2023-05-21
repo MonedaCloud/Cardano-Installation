@@ -6,10 +6,11 @@
 
 CNODE_VERSION="8.0.0"
 
-cd /opt/cardano/cnode/files/
-wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
-echo '"ConwayGenesisFile": "/opt/cardano/cnode/files/conway-genesis.json",' >> config.json
-echo '"ConwayGenesisHash": "f28f1c1280ea0d32f8cd3143e268650d6c1a8e221522ce4a7d20d62fc09783e1"' >> config.json
+# These steps are recommended to be done manually.
+#cd /opt/cardano/cnode/files/
+#wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
+#echo '"ConwayGenesisFile": "/opt/cardano/cnode/files/conway-genesis.json",' >> config.json
+#echo '"ConwayGenesisHash": "f28f1c1280ea0d32f8cd3143e268650d6c1a8e221522ce4a7d20d62fc09783e1"' >> config.json
 
 mkdir -p ~/src
 
