@@ -4,7 +4,7 @@
 ### Run first pre-install-os.sh script. ###
 ### Run second pre-install-libs.sh script. ###
 
-CNODE_VERSION="1.35.3"
+CNODE_VERSION="1.35.7"
 
 mkdir -p ~/src
 
