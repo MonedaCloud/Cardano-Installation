@@ -12,16 +12,16 @@ NETWORK='mainnet'
 ### DO NOT CHANGE CODE BELOW. ###
 
 ghcup install ghc 8.10.7
-ghcup install cabal 3.6.2.0
+ghcup install cabal 3.8.1.0
 ghcup set ghc 8.10.7
-ghcup set cabal 3.6.2.0
+ghcup set cabal 3.8.1.0
 
 mkdir -p ~/src
 
 cd ~/src
 git clone https://github.com/input-output-hk/libsodium
 cd libsodium
-git checkout 66f017f1
+git checkout dbb48cce5429cb6585c9034f002568964f1ce567
 ./autogen.sh
 ./configure
 make
