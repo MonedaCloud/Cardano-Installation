@@ -1,6 +1,6 @@
 # Cardano Node Installation
 
-This repo contains scripts and installation steps for Cardano node as a block producer and relay.
+This repo contains scripts and installation steps for Cardano node as a block producer and relay. (Cardano release 8.0.0)
 
 ## How to use this repo:
 
