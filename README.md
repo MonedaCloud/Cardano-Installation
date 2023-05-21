@@ -22,19 +22,29 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 7. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
-**Note:** These steps were successfully tested on Mainnet with Cardano node version **1.35.3/4/5/6/7** (Vasil). This steps are the same for Producer nodes and Relay nodes.
+**Note:** These steps were successfully tested on Mainnet with Cardano node version **8.0.0** (Conway). This steps are the same for Producer nodes and Relay nodes.
 
 # Cardano Node-Upgrading
 
 - The below steps assumes you already have a dedicated user named **cardano** with sudo privileges running on Ubuntu 20.04:
-- Verify CNODE_VERSION="1.35.X" line has the correct release version number.
-- DO NOT run below comand as sudo, the prompt will ask for sudo credentials by itself.
+- Verify CNODE_VERSION="8.0.X" line has the correct release version number.
+- **DO NOT run below comand as sudo, the prompt will ask for sudo credentials by itself.**
 
 1. terminal:~$ `chmod +x upgrade-cardano-node.sh`
-2. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="1.35.X" line with the correct version number.)
+
+### Download ConwayGenesisFile from Cardano "Configuration Files" Official release: (Required)
+terminal:~$ `cd /opt/cardano/cnode/files/`
+terminal:~$ `wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json`
+terminal:~$ `nano config.json` (Edit: Add ConwayGenesisFile configuration lines.)
+"ConwayGenesisFile": "/opt/cardano/cnode/files/conway-genesis.json",
+"ConwayGenesisHash": "f28f1c1280ea0d32f8cd3143e268650d6c1a8e221522ce4a7d20d62fc09783e1",
+
+2. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.0.X" line with the correct version number.)
 3. terminal:~$ `./upgrade-cardano-node.sh`
 
 ## References:
+
+https://github.com/input-output-hk/cardano-node/releases
 
 https://developers.cardano.org/docs/get-started/installing-cardano-node/
 
