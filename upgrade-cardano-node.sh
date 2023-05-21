@@ -4,7 +4,7 @@
 ### Run first pre-installCardanoNode.sh script. ###
 ### Run second installCardanoNodeLibs.sh script. ###
 
-CNODE_VERSION="1.35.5"
+CNODE_VERSION="8.0.0"
 
 #Patch OS - Optional
 sudo apt update
@@ -24,12 +24,22 @@ git checkout tags/$CNODE_VERSION
 #Update Libs
 ghcup upgrade
 ghcup install ghc 8.10.7
-ghcup install cabal 3.6.2.0
+ghcup install cabal 3.8.1.0
 ghcup set ghc 8.10.7
-ghcup set cabal 3.6.2.0
+ghcup set cabal 3.8.1.0
 cabal update
 ghc --version
 cabal --version
+
+#Updade libsodium-vrf
+cd ~/src
+git clone https://github.com/input-output-hk/libsodium
+cd libsodium
+git checkout dbb48cce5429cb6585c9034f002568964f1ce567
+./autogen.sh
+./configure
+make
+sudo make install
 
 cabal configure -O0 -w ghc-8.10.7
 echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
