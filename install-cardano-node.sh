@@ -15,7 +15,8 @@ CNODE_VERSION="8.0.0"
 mkdir -p ~/src
 
 cd ~/src
-git clone https://github.com/input-output-hk/cardano-node.git
+rm -rf cardano-node
+git clone https://github.com/input-output-hk/cardano-node.git cardano-node
 cd cardano-node
 git fetch --tags --all
 git checkout tags/$CNODE_VERSION
