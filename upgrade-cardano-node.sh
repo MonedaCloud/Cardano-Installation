@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ### Cardano Node Build/Upgrade FROM source: 1 OF 1 ###
 ### Run first pre-installCardanoNode.sh script. ###
@@ -42,6 +42,7 @@ git fetch --all --recurse-submodules --tags
 git checkout tags/$CNODE_VERSION
 
 # Prepare compiler env
+cabal update
 cabal configure -O0 -w ghc-8.10.7
 echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
 
