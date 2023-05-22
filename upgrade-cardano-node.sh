@@ -24,11 +24,6 @@ cabal update
 ghc --version
 cabal --version
 
-# Prepare compiler env
-mkdir -p ~/src
-cabal configure -O0 -w ghc-8.10.7
-echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
-
 # Updade libsodium-vrf
 cd ~/src
 git clone https://github.com/input-output-hk/libsodium libsodium2
@@ -45,7 +40,12 @@ git clone https://github.com/input-output-hk/cardano-node.git cardano-node2
 cd cardano-node2/
 git fetch --all --recurse-submodules --tags
 git checkout tags/$CNODE_VERSION
+
+# Prepare compiler env
+cabal configure -O0 -w ghc-8.10.7
 echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
+
+# Build release command
 cabal build cardano-node cardano-cli
 
 # Deploy upgraded node
