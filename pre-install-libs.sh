@@ -19,7 +19,8 @@ ghcup set cabal 3.8.1.0
 mkdir -p ~/src
 
 cd ~/src
-git clone https://github.com/input-output-hk/libsodium
+rm -rf libsodium
+git clone https://github.com/input-output-hk/libsodium libsodium
 cd libsodium
 git checkout dbb48cce5429cb6585c9034f002568964f1ce567
 ./autogen.sh
@@ -37,7 +38,8 @@ export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 sudo apt install libsodium-dev
 
 cd ~/src
-git clone https://github.com/bitcoin-core/secp256k1
+rm -rf secp256k1
+git clone https://github.com/bitcoin-core/secp256k1 secp256k1
 cd secp256k1
 git checkout ac83be33
 ./autogen.sh
