@@ -20,7 +20,12 @@ git clone https://github.com/input-output-hk/cardano-node.git cardano-node
 cd cardano-node
 git fetch --tags --all
 git checkout tags/$CNODE_VERSION
-echo "with-compiler: ghc-8.10.7" >> cabal.project.local
+
+# Prepare compiler env
+cabal configure -O0 -w ghc-8.10.7
+echo -e "with-compiler: ghc-8.10.7\n package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
+
+# Build release command
 cabal build all
 
 mkdir -p ~/.local/bin
