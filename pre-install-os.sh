@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ### Pre Cardano Node OS Install/Upgrade FROM source: 1 OF 3 ###
 
