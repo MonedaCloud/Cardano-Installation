@@ -15,6 +15,7 @@ ghcup install ghc 8.10.7
 ghcup install cabal 3.8.1.0
 ghcup set ghc 8.10.7
 ghcup set cabal 3.8.1.0
+cabal update
 
 mkdir -p ~/src
 
