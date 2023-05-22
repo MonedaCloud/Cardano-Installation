@@ -45,7 +45,7 @@ git clone https://github.com/input-output-hk/cardano-node.git cardano-node2
 cd cardano-node2/
 git fetch --all --recurse-submodules --tags
 git checkout tags/$CNODE_VERSION
-
+echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
 cabal build cardano-node cardano-cli
 
 # Deploy upgraded node
