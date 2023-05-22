@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ### Cardano Node Libs FROM source: 2 OF 3 ###
 ### Run first pre-install-os.sh script. ###
