@@ -29,4 +29,4 @@ rustup component add clippy rustfmt
 
 rustup target add x86_64-unknown-linux-musl
 
-echo 'Run [ source ~/.bashrc ] on the terminal before proceeding to nest step.'
+echo 'Run [ source ~/.bashrc ] on the terminal before proceeding to next step.'
