@@ -4,13 +4,10 @@
 ### Run first pre-install-os.sh script. ###
 ### Run second pre-install-libs.sh script. ###
 
+# https://github.com/input-output-hk/cardano-node/releases
 CNODE_VERSION="8.0.0"
-
-# These steps are recommended to be done manually.
-#cd /opt/cardano/cnode/files/
-#wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
-#echo '"ConwayGenesisFile": "/opt/cardano/cnode/files/conway-genesis.json",' >> config.json
-#echo '"ConwayGenesisHash": "f28f1c1280ea0d32f8cd3143e268650d6c1a8e221522ce4a7d20d62fc09783e1"' >> config.json
+# Values: mainnet|preprod
+NETWORK='mainnet'
 
 mkdir -p ~/src
 
@@ -39,6 +36,34 @@ export PATH="$HOME/.local/bin/:$PATH"
 cardano-cli --version
 cardano-node --version
 
+case "$NETWORK" in
+'mainnet')
+# MAINNET CONFIG
+echo "1. Setting up $NETWORK CONFIG FILES"
+cd /opt/cardano/cnode/files/
+mv config.json config.json.bk
+wget https://book.world.dev.cardano.org/environments/mainnet/config.json
+# Adding conway files for release >v8.0.0:
+wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
+;;
+'preprod')
+# PREPROD CONFIG
+echo "2. Setting up $NETWORK CONFIG FILES"
+cd /opt/cardano/cnode/files/
+mv config.json config.json.bk
+wget https://book.world.dev.cardano.org/environments/preprod/config.json
+# Adding conway files for release >v8.0.0:
+wget https://book.world.dev.cardano.org/environments/preprod/conway-genesis.json
+;;
+*)
+echo "NETWORK: $NETWORK CONFIGURED"
+;;
+esac
+
+# Start/restart Cardano node service:
+sudo systemctl restart cnode
+
+# Run systemd deploy script:
 cd /opt/cardano/cnode/scripts
 ./deploy-as-systemd.sh
 
@@ -49,4 +74,5 @@ export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node0.socket"
 export PATH="/opt/cardano/cnode/scripts:/$HOME/.cabal/bin:$PATH"
 export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
 . "${HOME}/.bashrc"
+
 echo 'END'
