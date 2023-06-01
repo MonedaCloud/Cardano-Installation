@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### Cardano Node Build/Upgrade FROM source: 1 OF 1 ###
-### Run first pre-installCardanoNode.sh script. ###
-### Run second installCardanoNodeLibs.sh script. ###
+### Run first pre-install-os.sh script. ###
+### Run second pre-install-libs.sh script. ###
 
 CNODE_VERSION="8.0.0"
 
