@@ -44,20 +44,14 @@ case "$NETWORK" in
 # MAINNET CONFIG
 echo "1. Setting up $NETWORK CONFIG FILES"
 cd /opt/cardano/cnode/files/
-mv config.json config.json.bk
-mv conway-genesis.json conway-genesis.json.bk
-wget https://book.world.dev.cardano.org/environments/mainnet/config.json
-# Adding conway files for release >v8.0.0:
+cp conway-genesis.json conway-genesis.json.bk
 wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
 ;;
 'preprod')
 # PREPROD CONFIG
 echo "2. Setting up $NETWORK CONFIG FILES"
 cd /opt/cardano/cnode/files/
-mv config.json config.json.bk
-mv conway-genesis.json conway-genesis.json.bk
-wget https://book.world.dev.cardano.org/environments/preprod/config.json
-# Adding conway files for release >v8.0.0:
+cp conway-genesis.json conway-genesis.json.bk
 wget https://book.world.dev.cardano.org/environments/preprod/conway-genesis.json
 ;;
 *)
