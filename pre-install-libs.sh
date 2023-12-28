@@ -45,10 +45,11 @@ cd ~/src
 rm -rf libsodium
 git clone https://github.com/input-output-hk/libsodium libsodium
 cd libsodium
-git checkout dbb48cce5429cb6585c9034f002568964f1ce567
+git checkout dbb48cc
 ./autogen.sh
 ./configure
 make
+make check
 sudo make install
 
 # Download and configure Guild deploy script:

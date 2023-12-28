@@ -4,7 +4,7 @@
 ### Run first pre-install-os.sh script. ###
 ### Run second pre-install-libs.sh script. ###
 
-CNODE_VERSION="8.0.0"
+CNODE_VERSION="8.7.2"
 
 # Patch OS - Optional
 sudo apt update
@@ -28,11 +28,36 @@ cabal --version
 cd ~/src
 git clone https://github.com/input-output-hk/libsodium libsodium2
 cd libsodium2
-git checkout dbb48cce5429cb6585c9034f002568964f1ce567
+git checkout dbb48cc
 ./autogen.sh
 ./configure
 make
+make check
 sudo make install
+
+# Install BLST
+cd ~/src
+git clone https://github.com/supranational/blst blst2
+cd blst2
+git checkout v0.3.10
+./build.sh
+cat > libblst.pc << EOF
+prefix=/usr/local
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: libblst
+Description: Multilingual BLS12-381 signature library
+URL: https://github.com/supranational/blst
+Version: 0.3.10
+Cflags: -I\${includedir}
+Libs: -L\${libdir} -lblst
+EOF
+sudo cp libblst.pc /usr/local/lib/pkgconfig/
+sudo cp bindings/blst_aux.h bindings/blst.h bindings/blst.hpp  /usr/local/include/
+sudo cp libblst.a /usr/local/lib
+sudo chmod u=rw,go=r /usr/local/{lib/{libblst.a,pkgconfig/libblst.pc},include/{blst.{h,hpp},blst_aux.h}}
 
 # Build Cardano node from source
 cd ~/src
@@ -41,13 +66,21 @@ cd cardano-node2/
 git fetch --all --recurse-submodules --tags
 git checkout tags/$CNODE_VERSION
 
+# Update blckchain genesis files:
+mv /opt/cardano/cnode/files/conway-genesis.json /opt/cardano/cnode/files/conway-genesis.json.bk_$CNODE_VERSION
+mv /opt/cardano/cnode/files/config.json /opt/cardano/cnode/files/config.json.bk_$CNODE_VERSION
+cp configuration/cardano/mainnet-conway-genesis.json /opt/cardano/cnode/files/conway-genesis.json
+cp configuration/cardano/mainnet-conway-genesis.json /opt/cardano/cnode/files/config.json
+
 # Prepare compiler env
 cabal update
 cabal configure -O0 -w ghc-8.10.7
 echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
 
 # Build release command
-cabal build cardano-node cardano-cli
+cabal build all
+cabal build cardano-cli
+cabal build cardano-node
 
 # Deploy upgraded node
 sudo systemctl stop cnode
@@ -60,8 +93,11 @@ cp -p "$(./scripts/bin-path.sh cardano-cli)" ~/.local/bin/
 cd ~/src
 rm -rf cardano-node-old
 rm -rf libsodium-old
+rm -rf blst-old
 mv libsodium libsodium-old
 mv libsodium2 libsodium
+mv blst blst-old
+mv blst2 blst
 mv cardano-node cardano-node-old
 mv cardano-node2 cardano-node
 

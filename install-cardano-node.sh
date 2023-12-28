@@ -5,7 +5,7 @@
 ### Run second pre-install-libs.sh script. ###
 
 # https://github.com/input-output-hk/cardano-node/releases
-CNODE_VERSION="8.0.0"
+CNODE_VERSION="8.7.2"
 # Values: mainnet|preprod
 NETWORK='mainnet'
 
@@ -21,10 +21,13 @@ git checkout tags/$CNODE_VERSION
 # Prepare compiler env
 cabal update
 cabal configure -O0 -w ghc-8.10.7
+# Add below line for development testnet enviroments only:
 echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
 
 # Build release command
 cabal build all
+cabal build cardano-cli
+cabal build cardano-node
 
 mkdir -p ~/.local/bin
 cp -p "$(./scripts/bin-path.sh cardano-node)" ~/.local/bin/
@@ -42,6 +45,7 @@ case "$NETWORK" in
 echo "1. Setting up $NETWORK CONFIG FILES"
 cd /opt/cardano/cnode/files/
 mv config.json config.json.bk
+mv conway-genesis.json conway-genesis.json.bk
 wget https://book.world.dev.cardano.org/environments/mainnet/config.json
 # Adding conway files for release >v8.0.0:
 wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
@@ -51,6 +55,7 @@ wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
 echo "2. Setting up $NETWORK CONFIG FILES"
 cd /opt/cardano/cnode/files/
 mv config.json config.json.bk
+mv conway-genesis.json conway-genesis.json.bk
 wget https://book.world.dev.cardano.org/environments/preprod/config.json
 # Adding conway files for release >v8.0.0:
 wget https://book.world.dev.cardano.org/environments/preprod/conway-genesis.json
