@@ -17,9 +17,11 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 2. terminal:~$ `source ~/.bashrc`
 3. terminal:~$ `./pre-install-libs.sh`
 4. terminal:~$ `source ~/.bashrc`
-5. terminal:~$ `./install-cardano-node.sh`
-6. Configure env, cnode.sh, topologyUpdater.sh (Relay Only), topology.json (Node Only).
-7. terminal:~$ `sudo reboot`
+5. terminal:~$ `chmod +x set-genesis-files.sh`
+6. terminal:~$ `./set-genesis-files.sh`
+7. terminal:~$ `./install-cardano-node.sh`
+8. Configure env, cnode.sh, topologyUpdater.sh (Legacy Relay Only), topology.json (Node Only).
+9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
 **Note:** These steps were successfully tested on Mainnet and Preprod with Cardano node version **8.7.2** (Conway). This steps are the same for Producer nodes and Relay nodes.
@@ -41,12 +43,14 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ### Cardano release upgrade commands
 
-1. terminal:~$ `chmod +x upgrade-cardano-node.sh`
-2. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.7.X" line with the correct version number.)
+1. terminal:~$ `chmod +x upgrade-genesis-files.sh`
+2. terminal:~$ `./upgrade-genesis-files.sh`
+3. terminal:~$ `chmod +x upgrade-cardano-node.sh`
+4. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.7.X" line with the correct version number.)
 
 **DO NOT run below comand as sudo, the prompt will ask for sudo credentials by itself.**
 
-3. terminal:~$ `./upgrade-cardano-node.sh`
+5. terminal:~$ `./upgrade-cardano-node.sh`
 
 ## References:
 
