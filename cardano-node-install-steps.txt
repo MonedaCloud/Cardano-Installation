@@ -31,6 +31,7 @@ rustup target add x86_64-unknown-linux-musl
 
 echo 'Run [ source ~/.bashrc ] on the terminal before proceeding to next step.'
 
+
 #############################################
 ### Cardano Node Libs FROM source: 2 OF 3 ###
 #############################################
@@ -77,11 +78,36 @@ cd ~/src
 rm -rf libsodium
 git clone https://github.com/input-output-hk/libsodium libsodium
 cd libsodium
-git checkout dbb48cce5429cb6585c9034f002568964f1ce567
+git checkout dbb48cc
 ./autogen.sh
 ./configure
 make
+make check
 sudo make install
+
+# Install BLST
+cd ~/src
+git clone https://github.com/supranational/blst blst2
+cd blst2
+git checkout v0.3.10
+./build.sh
+cat > libblst.pc << EOF
+prefix=/usr/local
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: libblst
+Description: Multilingual BLS12-381 signature library
+URL: https://github.com/supranational/blst
+Version: 0.3.10
+Cflags: -I\${includedir}
+Libs: -L\${libdir} -lblst
+EOF
+sudo cp libblst.pc /usr/local/lib/pkgconfig/
+sudo cp bindings/blst_aux.h bindings/blst.h bindings/blst.hpp  /usr/local/include/
+sudo cp libblst.a /usr/local/lib
+sudo chmod u=rw,go=r /usr/local/{lib/{libblst.a,pkgconfig/libblst.pc},include/{blst.{h,hpp},blst_aux.h}}
 
 # Download and configure Guild deploy script:
 cd ~/src
@@ -122,9 +148,21 @@ echo 'Run [ source ~/.bashrc ] on the terminal before proceeding to next step.'
 ######################################################
 
 # https://github.com/input-output-hk/cardano-node/releases
-CNODE_VERSION="8.0.0"
-# Values: mainnet|preprod
+
+CNODE_VERSION="8.7.2"
+
+# Values: mainnet|preprod|preview
 NETWORK='mainnet'
+
+# Cardano installation file path:
+CNODE_FILES='/opt/cardano/cnode/files'
+
+# Local Cardano Genesis files path:
+LOCAL_FILES="~/scripts/Cardano-Installation-$CNODE_VERSION"
+
+# Values: node|relay
+CNODE='relay'
+
 
 mkdir -p ~/src
 
@@ -138,10 +176,13 @@ git checkout tags/$CNODE_VERSION
 # Prepare compiler env
 cabal update
 cabal configure -O0 -w ghc-8.10.7
+# Add below line for development testnet enviroments only:
 echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
 
 # Build release command
 cabal build all
+cabal build cardano-cli
+cabal build cardano-node
 
 mkdir -p ~/.local/bin
 cp -p "$(./scripts/bin-path.sh cardano-node)" ~/.local/bin/
@@ -153,29 +194,32 @@ export PATH="$HOME/.local/bin/:$PATH"
 cardano-cli --version
 cardano-node --version
 
-case "$NETWORK" in
-'mainnet')
-# MAINNET CONFIG
-echo "1. Setting up $NETWORK CONFIG FILES"
-cd /opt/cardano/cnode/files/
-mv config.json config.json.bk
-wget https://book.world.dev.cardano.org/environments/mainnet/config.json
-# Adding conway files for release >v8.0.0:
-wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json
-;;
-'preprod')
-# PREPROD CONFIG
-echo "2. Setting up $NETWORK CONFIG FILES"
-cd /opt/cardano/cnode/files/
-mv config.json config.json.bk
-wget https://book.world.dev.cardano.org/environments/preprod/config.json
-# Adding conway files for release >v8.0.0:
-wget https://book.world.dev.cardano.org/environments/preprod/conway-genesis.json
-;;
-*)
-echo "NETWORK: $NETWORK CONFIGURED"
-;;
-esac
+# Backup file:
+cp $CNODE_FILES/config.json $CNODE_FILES/config.json.bk_pre_$CNODE_VERSION
+cp $CNODE_FILES/topology.json $CNODE_FILES/topology.json.bk_pre_$CNODE_VERSION
+cp $CNODE_FILES/byron-genesis.json $CNODE_FILES/byron-genesis.json.bk_pre_$CNODE_VERSION
+cp $CNODE_FILES/shelley-genesis.json $CNODE_FILES/shelley-genesis.json.bk_pre_$CNODE_VERSION
+cp $CNODE_FILES/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json.bk_pre_$CNODE_VERSION
+cp $CNODE_FILES/conway-genesis.json $CNODE_FILES/conway-genesis.json.bk_pre_$CNODE_VERSION
+
+# Update blockchain genesis files:
+cd $LOCAL_FILES
+cp ./opt/cardano/cnode/files/$NETWORK/config.json $CNODE_FILES/config.json
+cp ./opt/cardano/cnode/files/$NETWORK/topology.json $CNODE_FILES/topology.json
+cp ./opt/cardano/cnode/files/$NETWORK/byron-genesis.json $CNODE_FILES/byron-genesis.json
+cp ./opt/cardano/cnode/files/$NETWORK/shelley-genesis.json $CNODE_FILES/shelley-genesis.json
+cp ./opt/cardano/cnode/files/$NETWORK/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json
+cp ./opt/cardano/cnode/files/$NETWORK/conway-genesis.json $CNODE_FILES/conway-genesis.json
+
+# Get pre-configured mainnet node config.json file without P2P and logging settings enabled:
+if [[ "$CNODE" == "node" && "$NETWORK" == "mainnet" ]]; then
+    cp ./opt/cardano/cnode/files/$NETWORK/config-node.json $CNODE_FILES/config.json
+fi
+
+# Get pre-configured mainnet relay config.json file with P2P and logging settings enabled:
+if [[ "$CNODE" == "relay" && "$NETWORK" == "mainnet" ]]; then
+    cp ./opt/cardano/cnode/files/$NETWORK/config-relay.json $CNODE_FILES/config.json
+fi
 
 # Start/restart Cardano node service:
 sudo systemctl restart cnode
@@ -193,3 +237,4 @@ export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
 . "${HOME}/.bashrc"
 
 echo 'END'
+
