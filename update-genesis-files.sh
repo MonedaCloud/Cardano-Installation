@@ -1,10 +1,8 @@
 #!/bin/bash
 
-### Cardano Node Build/Install FROM source: 3 OF 3 ###
-### Run first pre-install-os.sh script. ###
-### Run second pre-install-libs.sh script. ###
-
-# https://github.com/input-output-hk/cardano-node/releases
+### Cardano Node/Relay upgrade FROM source: 1 OF 2 ###
+### Run first update-genesis-files.sh script. ###
+### Run second upgrade-cardano-node.sh script. ###
 
 CNODE_VERSION="8.7.2"
 
@@ -14,42 +12,9 @@ NETWORK='mainnet'
 # Cardano installation file path:
 CNODE_FILES='/opt/cardano/cnode/files'
 
-# Local Cardano Genesis files path:
-LOCAL_FILES="~/scripts/Cardano-Installation-$CNODE_VERSION"
-
 # Values: node|relay
 CNODE='relay'
 
-
-mkdir -p ~/src
-
-cd ~/src
-rm -rf cardano-node
-git clone https://github.com/input-output-hk/cardano-node.git cardano-node
-cd cardano-node
-git fetch --tags --all
-git checkout tags/$CNODE_VERSION
-
-# Prepare compiler env
-cabal update
-cabal configure -O0 -w ghc-8.10.7
-# Add below line for development testnet enviroments only:
-echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
-
-# Build release command
-cabal build all
-cabal build cardano-cli
-cabal build cardano-node
-
-mkdir -p ~/.local/bin
-cp -p "$(./scripts/bin-path.sh cardano-node)" ~/.local/bin/
-cp -p "$(./scripts/bin-path.sh cardano-cli)" ~/.local/bin/
-echo 'export PATH="$HOME/.local/bin/:$PATH"' >> ~/.bashrc
-export PATH="$HOME/.local/bin/:$PATH"
-. "${HOME}/.bashrc"
-
-cardano-cli --version
-cardano-node --version
 
 # Backup file:
 cp $CNODE_FILES/config.json $CNODE_FILES/config.json.bk_pre_$CNODE_VERSION
@@ -60,7 +25,6 @@ cp $CNODE_FILES/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json.bk_pre_$CNO
 cp $CNODE_FILES/conway-genesis.json $CNODE_FILES/conway-genesis.json.bk_pre_$CNODE_VERSION
 
 # Update blockchain genesis files:
-cd $LOCAL_FILES
 cp ./opt/cardano/cnode/files/$NETWORK/config.json $CNODE_FILES/config.json
 cp ./opt/cardano/cnode/files/$NETWORK/topology.json $CNODE_FILES/topology.json
 cp ./opt/cardano/cnode/files/$NETWORK/byron-genesis.json $CNODE_FILES/byron-genesis.json
@@ -78,19 +42,14 @@ if [[ "$CNODE" == "relay" && "$NETWORK" == "mainnet" ]]; then
     cp ./opt/cardano/cnode/files/$NETWORK/config-relay.json $CNODE_FILES/config.json
 fi
 
-# Start/restart Cardano node service:
-sudo systemctl restart cnode
+# Clean up
 
-# Run systemd deploy script:
-cd /opt/cardano/cnode/scripts
-./deploy-as-systemd.sh
 
-echo 'alias env=/usr/bin/env
-alias cntools=/opt/cardano/cnode/scripts/cntools.sh
-alias gLiveView=/opt/cardano/cnode/scripts/gLiveView.sh
-export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node0.socket"
-export PATH="/opt/cardano/cnode/scripts:/$HOME/.cabal/bin:$PATH"
-export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
-. "${HOME}/.bashrc"
+cardano-cli --version
+cardano-node --version
+
+echo "Cardano genesis files updated for version $CNODE_VERSION on network $NETWORK."
+
+echo "Run upgrade-cardano-node.sh script using CNODE_VERSION="$CNODE_VERSION" configuration."
 
 echo 'END'

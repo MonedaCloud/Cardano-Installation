@@ -29,17 +29,15 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 - The below steps assumes you already have a dedicated user named **cardano** with sudo privileges running on Ubuntu 22.04:
 - Verify CNODE_VERSION="8.7.X" line has the correct release version number.
 
-### Download ConwayGenesisFile from Cardano "Configuration Files" Official release: (Required)
+### Update Config files from Cardano "Configuration Files" Official release: (Required)
 
-- terminal:~$ `cd /opt/cardano/cnode/files/`
+- terminal:~$ `nano update-genesis-files.sh` (Edit: CNODE_VERSION="8.7.X"s, NETWORK='mainnet', CNODE='relay' lines with the intended values.)
+- terminal:~$ `./update-genesis-files.sh`
+- Visit https://book.world.dev.cardano.org/environments.html for references.
 
-- terminal:~$ `wget https://book.world.dev.cardano.org/environments/mainnet/conway-genesis.json`
+### Node Producer config.json configuration:
 
-- terminal:~$ `nano config.json` (Edit: Add ConwayGenesisFile configuration lines.)
-
-- "ConwayGenesisFile": "/opt/cardano/cnode/files/conway-genesis.json",
-
-- "ConwayGenesisHash": "f28f1c1280ea0d32f8cd3143e268650d6c1a8e221522ce4a7d20d62fc09783e1",
+- terminal:~$ `nano config.json` (Edit: Make sure that P2P line is disabled or removed and customize any other configuration line as needed.)
 
 ### Cardano release upgrade commands
 
@@ -61,3 +59,5 @@ https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-star
 https://github.com/input-output-hk/cardano-node/blob/master/doc/getting-started/install.md#using-the-ported-c-code
 
 https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-started/install.md#installing-blst
+
+https://book.world.dev.cardano.org/environments.html

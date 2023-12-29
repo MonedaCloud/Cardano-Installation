@@ -1,10 +1,11 @@
 #!/bin/bash
 
-### Cardano Node Build/Upgrade FROM source: 1 OF 1 ###
-### Run first pre-install-os.sh script. ###
-### Run second pre-install-libs.sh script. ###
+### Cardano Node/Relay upgrade FROM source: 1 OF 2 ###
+### Run first update-genesis-files.sh script. ###
+### Run second upgrade-cardano-node.sh script. ###
 
 CNODE_VERSION="8.7.2"
+
 
 # Patch OS - Optional
 sudo apt update
