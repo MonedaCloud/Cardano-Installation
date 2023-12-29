@@ -18,8 +18,6 @@
   "TargetNumberOfEstablishedPeers": 50,
   "TargetNumberOfKnownPeers": 100,
   "TargetNumberOfRootPeers": 100,
-  "EnableLogging": true,
-  "EnableLogMetrics": false,
   "TraceAcceptPolicy": true,
   "TraceBlockFetchClient": false,
   "TraceBlockFetchDecisions": false,
