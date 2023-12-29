@@ -67,11 +67,6 @@ cd cardano-node2/
 git fetch --all --recurse-submodules --tags
 git checkout tags/$CNODE_VERSION
 
-# Update blockchain genesis files:
-mv /opt/cardano/cnode/files/conway-genesis.json /opt/cardano/cnode/files/conway-genesis.json.bk_$CNODE_VERSION
-cp configuration/cardano/mainnet-conway-genesis.json /opt/cardano/cnode/files/conway-genesis.json
-cp configuration/cardano/mainnet-config.json /opt/cardano/cnode/files/mainnet-config.json_$CNODE_VERSION
-
 # Prepare compiler env
 cabal update
 cabal configure -O0 -w ghc-8.10.7
