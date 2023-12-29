@@ -15,7 +15,7 @@ NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 
 # Local Cardano Genesis files path:
-LOCAL_FILES="~/scripts/Cardano-Installation-$CNODE_VERSION"
+LOCAL_FILES="`pwd`"
 
 # Values: node|relay
 CNODE='relay'

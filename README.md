@@ -48,6 +48,8 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 3. terminal:~$ `chmod +x upgrade-cardano-node.sh`
 4. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.7.X" line with the correct version number.)
 
+**Note:** When setting on mainnet disable P2P settings in the config.json file if relay is set to use legacy topology settings. Cardano recommends to have one relay using P2P and another using legacy settings.  
+
 **DO NOT run below comand as sudo, the prompt will ask for sudo credentials by itself.**
 
 5. terminal:~$ `./upgrade-cardano-node.sh`
