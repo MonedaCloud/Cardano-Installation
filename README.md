@@ -4,7 +4,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ## How to use this repo:
 
-### Option 1:
+### Option 1: (Advanced)
 
 - Installation manually step by step using cardano-node-install-steps.txt.
 
