@@ -1,11 +1,14 @@
 #!/bin/bash
 
-### Cardano Node/Relay upgrade FROM source: 1 OF 2 ###
+### Cardano Node/Relay upgrade FROM binaries: 1 OF 2 ###
 ### Run first upgrade-genesis-files.sh script. ###
 ### Run second upgrade-cardano-node.sh script. ###
 
 # Cardano Node Release:
 CNODE_VERSION="8.9.0"
+
+# Binary source:
+BINARY="https://github.com/IntersectMBO/cardano-node/releases/download/$CNODE_VERSION/cardano-node-$CNODE_VERSION-linux.tar.gz"
 
 ### DO NOT EDIT BELOW THS LINE. ###
 
@@ -62,29 +65,23 @@ sudo cp bindings/blst_aux.h bindings/blst.h bindings/blst.hpp  /usr/local/includ
 sudo cp libblst.a /usr/local/lib
 sudo chmod u=rw,go=r /usr/local/{lib/{libblst.a,pkgconfig/libblst.pc},include/{blst.{h,hpp},blst_aux.h}}
 
-# Build Cardano node from source
+# Download Cardano Node release from GitHub:
+mkdir -p ~/src
 cd ~/src
-git clone https://github.com/input-output-hk/cardano-node.git cardano-node2
-cd cardano-node2/
-git fetch --all --recurse-submodules --tags
-git checkout tags/$CNODE_VERSION
-
-# Prepare compiler env
-cabal update
-cabal configure -O0 -w ghc-8.10.7
-echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
-
-# Build release command
-cabal build all
-cabal build cardano-cli
-cabal build cardano-node
+rm -rf cardano-node-*
+wget $BINARY
+tar -xvzf cardano-node*.tar.gz
+cd cardano-node-$CNODE_VERSION*
 
 # Deploy upgraded node
 sudo systemctl stop cnode
 
+# Deploy Cardano Node binaries into local bin directory:
 mkdir -p ~/.local/bin
-cp -p "$(./scripts/bin-path.sh cardano-node)" ~/.local/bin/
-cp -p "$(./scripts/bin-path.sh cardano-cli)" ~/.local/bin/
+cp  ./bin/* ~/.local/bin/
+echo 'export PATH="$HOME/.local/bin/:$PATH"' >> ~/.bashrc
+export PATH="$HOME/.local/bin/:$PATH"
+. "${HOME}/.bashrc"
 
 # Clean up
 cd ~/src
