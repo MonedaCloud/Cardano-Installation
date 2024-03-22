@@ -65,3 +65,5 @@ https://github.com/input-output-hk/cardano-node/blob/master/doc/getting-started/
 https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-started/install.md#installing-blst
 
 https://book.world.dev.cardano.org/environments.html
+
+https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-started/understanding-config-files.md#light-genesis-aka-bootstrap-peers
