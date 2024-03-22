@@ -47,7 +47,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ### Node Producer config.json configuration:
 
-- terminal:~$ `nano config.json` (Edit: Make sure that P2P line is disabled or removed and customize any other configuration line as needed.)
+- terminal:~$ `nano config.json` (Edit: Make sure that P2P line is disabled and remove/customize any other configuration line as needed.)
 
 ### Cardano Node Installation release upgrading commands:
 
