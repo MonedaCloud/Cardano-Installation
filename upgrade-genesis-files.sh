@@ -4,7 +4,7 @@
 ### Run first update-genesis-files.sh script. ###
 ### Run second upgrade-cardano-node.sh script. ###
 
-CNODE_VERSION="8.7.2"
+CNODE_VERSION="8.7.3"
 
 # Values: mainnet|preprod|preview
 NETWORK='mainnet'

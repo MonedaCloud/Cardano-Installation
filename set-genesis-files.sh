@@ -3,7 +3,7 @@
 ### Setting Genesis Cardano Node/Relay files. ###
 
 
-CNODE_VERSION="8.7.2"
+CNODE_VERSION="8.7.3"
 
 # Values: mainnet|preprod|preview
 NETWORK='mainnet'
