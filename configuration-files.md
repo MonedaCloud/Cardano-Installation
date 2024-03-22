@@ -1,6 +1,6 @@
 # Cardano Node Configuration Guide
 
-This document explains the bare minimum configuration one needs to do run a Cardano block producer (node) or a Cardano relay.
+This document explains the bare minimum configuration needed to run a Cardano block producer (node) or a Cardano relay.
 
 ## Relay Configuration
 
