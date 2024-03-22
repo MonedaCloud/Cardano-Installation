@@ -5,11 +5,11 @@
 
 # Values: RELAY|NODE
 MODE='RELAY'
+
 # Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
 
-
-### DO NOT CHANGE CODE BELOW. ###
+### DO NOT EDIT BELOW THS LINE. ###
 
 ghcup install ghc 8.10.7
 ghcup install cabal 3.8.1.0

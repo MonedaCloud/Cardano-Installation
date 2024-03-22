@@ -4,6 +4,7 @@
 ### Run first update-genesis-files.sh script. ###
 ### Run second upgrade-cardano-node.sh script. ###
 
+# Cardano Node Release:
 CNODE_VERSION="8.9.0"
 
 # Values: mainnet|preprod|preview|sanchonet
@@ -15,6 +16,7 @@ CNODE_FILES='/opt/cardano/cnode/files'
 # Values: node|relay
 CNODE='relay'
 
+### DO NOT EDIT BELOW THS LINE. ###
 
 # Backup file:
 cp $CNODE_FILES/config.json $CNODE_FILES/config.json.bk_pre_$CNODE_VERSION

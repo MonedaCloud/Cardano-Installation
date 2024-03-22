@@ -4,8 +4,10 @@
 ### Run first update-genesis-files.sh script. ###
 ### Run second upgrade-cardano-node.sh script. ###
 
+# Cardano Node Release:
 CNODE_VERSION="8.9.0"
 
+### DO NOT EDIT BELOW THS LINE. ###
 
 # Patch OS - Optional
 sudo apt update

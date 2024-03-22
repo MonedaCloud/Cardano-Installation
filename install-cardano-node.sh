@@ -6,6 +6,7 @@
 
 # https://github.com/input-output-hk/cardano-node/releases
 
+# Cardano Node Release:
 CNODE_VERSION="8.9.0"
 
 # Values: mainnet|preprod|preview|sanchonet
@@ -20,6 +21,7 @@ LOCAL_FILES="`pwd`"
 # Values: node|relay
 CNODE='relay'
 
+### DO NOT EDIT BELOW THS LINE. ###
 
 mkdir -p ~/src
 

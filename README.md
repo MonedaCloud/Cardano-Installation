@@ -4,11 +4,15 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ## How to use this repo:
 
-### Option 1: (Advanced)
+### Default settings
 
-- Installation manually step by step using cardano-node-install-steps.txt.
+- Adjust settings before proceeding with the installation.
+- CNODE_VERSION="8.9.0"
+- NETWORK='mainnet'
+- CNODE_FILES='/opt/cardano/cnode/files'
+- CNODE='relay'
 
-### Option 2: (Recommended)
+### Option 1: (Installing from source.)
 
 - The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 
@@ -26,14 +30,18 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 **Note:** These steps were successfully tested on Mainnet and Preprod with Cardano node version **8.9.0**. These steps are the same for Producer nodes and Relay nodes.
 
-# Cardano Node-Upgrading
+# Cardano Node-Upgrading (Upgrading from source.)
 
 - The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
-- Verify CNODE_VERSION="8.7.X" line has the correct release version number.
+- Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
+- CNODE_VERSION="8.9.0"
+- NETWORK='mainnet'
+- CNODE_FILES='/opt/cardano/cnode/files'
+- CNODE='relay'
 
 ### Update Config files from Cardano "Configuration Files" Official release: (Required)
 
-- terminal:~$ `nano update-genesis-files.sh` (Edit: CNODE_VERSION="8.7.X"s, NETWORK='mainnet', CNODE='relay' lines with the intended values.)
+- terminal:~$ `nano update-genesis-files.sh` (Edit: CNODE_VERSION="8.9.X"s, NETWORK='mainnet', CNODE='relay' lines with the intended values.)
 - terminal:~$ `./update-genesis-files.sh`
 - Visit https://book.world.dev.cardano.org/environments.html for references.
 
@@ -46,7 +54,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 1. terminal:~$ `chmod +x upgrade-genesis-files.sh`
 2. terminal:~$ `./upgrade-genesis-files.sh`
 3. terminal:~$ `chmod +x upgrade-cardano-node.sh`
-4. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.7.X" line with the correct version number.)
+4. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.9.X" line with the correct version number.)
 
 **DO NOT run the below command as sudo; the prompt will ask for sudo credentials.**
 
