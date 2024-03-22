@@ -12,23 +12,33 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 - CNODE_FILES='/opt/cardano/cnode/files'
 - CNODE='relay'
 
-### Option 1: (Installing from source.)
+**Note:** These steps were successfully tested on Mainnet and Preprod environments with Cardano node version **8.9.0**. These steps are the same for Producer nodes and Relay nodes.
 
 - The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
+
+### Option 1: (Installing from Cardano GitHub binaries repository.)
 
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
 2. terminal:~$ `git checkout v8.9.0`
-3. terminal:~$ `./pre-install-os.sh` (Accept defaults by hitting [ENTER])
-4. terminal:~$ `source ~/.bashrc`
-5. terminal:~$ `./pre-install-libs.sh`
-6. terminal:~$ `source ~/.bashrc`
-7. terminal:~$ `./install-cardano-node.sh`
+3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
+5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
+7. terminal:~$ `./install-cardano-node-binaries.sh`
 8. Configure env, cnode.sh, topology.json (Node Only).
 9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
-**Note:** These steps were successfully tested on Mainnet and Preprod with Cardano node version **8.9.0**. These steps are the same for Producer nodes and Relay nodes.
+### Option 2: (Installing from source.)
+
+0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
+1. terminal:~$ `cd Cardano-Installation`
+2. terminal:~$ `git checkout v8.9.0`
+3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
+5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
+7. terminal:~$ `./install-cardano-node.sh`
+8. Configure env, cnode.sh, topology.json (Node Only).
+9. terminal:~$ `sudo reboot`
+* Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
 ## Upgrading Cardano Node
 

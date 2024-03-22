@@ -30,9 +30,10 @@ BINARY="https://github.com/IntersectMBO/cardano-node/releases/download/$CNODE_VE
 mkdir -p ~/src
 cd ~/src
 rm -rf cardano-node-*
+rm -rf bin
+rm -rf share
 wget $BINARY
 tar -xvzf cardano-node*.tar.gz
-cd cardano-node-$CNODE_VERSION*
 
 # Deploy Cardano Node binaries into local bin directory:
 mkdir -p ~/.local/bin
@@ -70,9 +71,6 @@ fi
 if [[ "$CNODE" == "relay" && "$NETWORK" == "mainnet" ]]; then
     cp ./opt/cardano/cnode/files/$NETWORK/config-relay.json $CNODE_FILES/config.json
 fi
-
-# Start/restart Cardano node service:
-sudo systemctl restart cnode
 
 # Run systemd deploy script:
 cd /opt/cardano/cnode/scripts

@@ -69,9 +69,10 @@ sudo chmod u=rw,go=r /usr/local/{lib/{libblst.a,pkgconfig/libblst.pc},include/{b
 mkdir -p ~/src
 cd ~/src
 rm -rf cardano-node-*
+rm -rf bin
+rm -rf share
 wget $BINARY
 tar -xvzf cardano-node*.tar.gz
-cd cardano-node-$CNODE_VERSION*
 
 # Deploy Cardano Node binaries into local bin directory:
 mkdir -p ~/.local/bin
@@ -95,6 +96,6 @@ mv cardano-node2 cardano-node
 cardano-cli --version
 cardano-node --version
 
-sudo systemctl start cnode
+sudo systemctl restart cnode
 
 echo 'END'
