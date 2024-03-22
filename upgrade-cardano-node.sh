@@ -79,9 +79,6 @@ cabal build all
 cabal build cardano-cli
 cabal build cardano-node
 
-# Deploy upgraded node
-sudo systemctl stop cnode
-
 mkdir -p ~/.local/bin
 cp -p "$(./scripts/bin-path.sh cardano-node)" ~/.local/bin/
 cp -p "$(./scripts/bin-path.sh cardano-cli)" ~/.local/bin/

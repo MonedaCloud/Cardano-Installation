@@ -73,9 +73,6 @@ wget $BINARY
 tar -xvzf cardano-node*.tar.gz
 cd cardano-node-$CNODE_VERSION*
 
-# Deploy upgraded node
-sudo systemctl stop cnode
-
 # Deploy Cardano Node binaries into local bin directory:
 mkdir -p ~/.local/bin
 cp  ./bin/* ~/.local/bin/

@@ -43,12 +43,6 @@ if [[ "$CNODE" == "relay" && "$NETWORK" == "mainnet" ]]; then
     cp ./opt/cardano/cnode/files/$NETWORK/config-relay.json $CNODE_FILES/config.json
 fi
 
-# Clean up
-
-
-cardano-cli --version
-cardano-node --version
-
 echo "Cardano genesis files updated for version $CNODE_VERSION on network $NETWORK."
 
 echo "Run upgrade-cardano-node.sh script using CNODE_VERSION="$CNODE_VERSION" configuration."
