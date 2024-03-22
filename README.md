@@ -24,7 +24,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node-binaries.sh`
-8. Configure env, cnode.sh, topology.json (Node Only).
+8. Configure scripts/env, scripts/cnode.sh, files/topology.json. Check the configuration-files.md guide.
 9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
@@ -36,7 +36,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node.sh`
-8. Configure env, cnode.sh, topology.json (Node Only).
+8. Configure scripts/env, scripts/cnode.sh, files/topology.json. Check the configuration-files.md guide.
 9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
