@@ -16,13 +16,13 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 - The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 
-0. terminal:~$ `chmod +x *install*.sh`
-1. terminal:~$ `./pre-install-os.sh`
-2. terminal:~$ `source ~/.bashrc`
-3. terminal:~$ `./pre-install-libs.sh`
+0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
+1. terminal:~$ `cd Cardano-Installation`
+2. terminal:~$ `git checkout v8.9.0`
+3. terminal:~$ `./pre-install-os.sh`
 4. terminal:~$ `source ~/.bashrc`
-5. terminal:~$ `chmod +x set-genesis-files.sh` 
-6. terminal:~$ `./set-genesis-files.sh`
+5. terminal:~$ `./pre-install-libs.sh`
+6. terminal:~$ `source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node.sh`
 8. Configure env, cnode.sh, topology.json (Node Only).
 9. terminal:~$ `sudo reboot`
@@ -30,7 +30,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 **Note:** These steps were successfully tested on Mainnet and Preprod with Cardano node version **8.9.0**. These steps are the same for Producer nodes and Relay nodes.
 
-## Cardano Node-Upgrading (Upgrading from source.)
+## Upgrading Cardano Node
 
 - The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 - Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
@@ -39,26 +39,28 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 - CNODE_FILES='/opt/cardano/cnode/files'
 - CNODE='relay'
 
-### Update Config files from Cardano "Configuration Files" Official release: (Required)
+### Update Configuration files from Cardano "Configuration Files" Official release: (Required)
 
-- terminal:~$ `nano update-genesis-files.sh` (Edit: CNODE_VERSION="8.9.X"s, NETWORK='mainnet', CNODE='relay' lines with the intended values.)
-- terminal:~$ `./update-genesis-files.sh`
+- terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.9.X" line with the correct version number.)
+- terminal:~$ `nano upgrade-genesis-files.sh` (Edit: CNODE_VERSION="8.9.X"s, NETWORK='mainnet', CNODE='relay' lines with the intended values.)
+
 - Visit https://book.world.dev.cardano.org/environments.html for references.
 
-### Node Producer config.json configuration:
+### Upgrading Steps (Upgrading from source.)
 
-- terminal:~$ `nano config.json` (Edit: Make sure that P2P line is disabled and remove/customize any other configuration line as needed.)
-
-### Cardano Node Installation release upgrading commands:
-
-1. terminal:~$ `chmod +x upgrade-genesis-files.sh`
+0. terminal:~$ `sudo systemctl stop cnode`
+1. terminal:~$ `./upgrade-cardano-node.sh`
 2. terminal:~$ `./upgrade-genesis-files.sh`
-3. terminal:~$ `chmod +x upgrade-cardano-node.sh`
-4. terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.9.X" line with the correct version number.)
+4. terminal:~$ `sudo systemctl start cnode`
 
-**DO NOT run the below command as sudo; the prompt will ask for sudo credentials.**
+### Monitoring the Cardano Node
 
-5. terminal:~$ `./upgrade-cardano-node.sh`
+- terminal:~$ `journalctl -fu cnode`
+- terminal:~$ `gLiveView`
+- terminal:~$ `tail -F /opt/cardano/cnode/logs/node0.json` (Mainnet configuration only.)
+
+
+**DO NOT run upgrade-cardano-node.sh as sudo; the prompt will ask for sudo credentials.**
 
 ## References:
 
