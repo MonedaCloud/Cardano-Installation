@@ -19,7 +19,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
 2. terminal:~$ `git checkout v8.9.0`
-3. terminal:~$ `./pre-install-os.sh`
+3. terminal:~$ `./pre-install-os.sh` (Accept defaults by hitting [ENTER])
 4. terminal:~$ `source ~/.bashrc`
 5. terminal:~$ `./pre-install-libs.sh`
 6. terminal:~$ `source ~/.bashrc`
