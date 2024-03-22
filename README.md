@@ -24,7 +24,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
-**Note:** These steps were successfully tested on Mainnet and Preprod with Cardano node version **8.7.3**. These steps are the same for Producer nodes and Relay nodes.
+**Note:** These steps were successfully tested on Mainnet and Preprod with Cardano node version **8.9.0**. These steps are the same for Producer nodes and Relay nodes.
 
 # Cardano Node-Upgrading
 

@@ -5,7 +5,7 @@
 
 # Values: RELAY|NODE
 MODE='RELAY'
-# Values: mainnet|preprod
+# Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
 
 

@@ -6,9 +6,9 @@
 
 # https://github.com/input-output-hk/cardano-node/releases
 
-CNODE_VERSION="8.7.2"
+CNODE_VERSION="8.9.0"
 
-# Values: mainnet|preprod|preview
+# Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
 
 # Cardano installation file path:

@@ -4,9 +4,9 @@
 ### Run first update-genesis-files.sh script. ###
 ### Run second upgrade-cardano-node.sh script. ###
 
-CNODE_VERSION="8.7.3"
+CNODE_VERSION="8.9.0"
 
-# Values: mainnet|preprod|preview
+# Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
 
 # Cardano installation file path:
