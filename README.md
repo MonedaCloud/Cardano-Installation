@@ -6,11 +6,13 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ### Default settings
 
-- Adjust settings before proceeding with the installation.
-- CNODE_VERSION="8.9.0"
-- NETWORK='mainnet'
-- CNODE_FILES='/opt/cardano/cnode/files'
-- CNODE='relay'
+```bash
+# Adjust settings before proceeding with the installation.
+CNODE_VERSION="8.9.0"
+NETWORK='mainnet'
+CNODE_FILES='/opt/cardano/cnode/files'
+CNODE='relay'
+```
 
 **Note:** These steps were successfully tested on Mainnet and Preprod environments with Cardano node version **8.9.0**. These steps are the same for Producer nodes and Relay nodes.
 
@@ -42,12 +44,14 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ## Upgrading Cardano Node
 
-- The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
-- Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
-- CNODE_VERSION="8.9.0"
-- NETWORK='mainnet'
-- CNODE_FILES='/opt/cardano/cnode/files'
-- CNODE='relay'
+```bash
+# The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
+# Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
+CNODE_VERSION="8.9.0"
+NETWORK='mainnet'
+CNODE_FILES='/opt/cardano/cnode/files'
+CNODE='relay'
+```
 
 ### Update Configuration files from Cardano "Configuration Files" Official release: (Required)
 
