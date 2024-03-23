@@ -53,15 +53,6 @@ CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
 ```
 
-```bash
-nano /opt/cardano/cnode/files/config.json
-```
-
-```bash
-# Disable P2P feature for node producers:
-"EnableP2P": false,
-```
-
 ### Update Configuration files from Cardano "Configuration Files" Official release: (Required)
 
 ```bash
@@ -70,13 +61,7 @@ cd Cardano-Installation
 git checkout v8.9.0
 ```
 
-#### Config for source upgrade
-
-```bash
-nano upgrade-genesis-files.sh
-```
-
-#### Config for binaries upgrade
+#### Node/relay Configuration
 
 ```bash
 nano upgrade-genesis-files.sh
@@ -91,10 +76,22 @@ nano upgrade-genesis-files.sh
 
 ### Upgrading Steps (Upgrading from binaries.)
 
-0. terminal:~$ `sudo systemctl stop cnode`
-1. terminal:~$ `./upgrade-cardano-node-binaries.sh`
-2. terminal:~$ `./upgrade-genesis-files.sh`
-4. terminal:~$ `sudo systemctl start cnode`
+```bash
+sudo systemctl stop cnode
+./upgrade-cardano-node-binaries.sh
+./upgrade-genesis-files.sh
+sudo systemctl start cnode
+```
+
+- Disable P2P feature for node producers:
+
+```bash
+nano /opt/cardano/cnode/files/config.json
+```
+
+```bash
+"EnableP2P": false,
+```
 
 ### Monitoring the Cardano Node
 
