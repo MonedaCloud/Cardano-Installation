@@ -122,3 +122,5 @@ https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-star
 https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-started/understanding-config-files.md#light-genesis-aka-bootstrap-peers
 
 https://book.world.dev.cardano.org/environments.html
+
+https://github.com/cardano-community/guild-operators
