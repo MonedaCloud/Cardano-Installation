@@ -53,9 +53,18 @@ CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
 ```
 
+```bash
+nano /opt/cardano/cnode/files/config.json
+```
+
+```bash
+# Disable P2P feature for node producers:
+"EnableP2P": false,
+```
+
 ### Update Configuration files from Cardano "Configuration Files" Official release: (Required)
 
-- terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
+- terminal:~$ ```git clone https://github.com/MonedaCloud/Cardano-Installation.git```
 - terminal:~$ `cd Cardano-Installation`
 - terminal:~$ `git checkout v8.9.0`
 
