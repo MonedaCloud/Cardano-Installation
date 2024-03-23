@@ -59,12 +59,12 @@ CNODE='relay'
 - terminal:~$ `cd Cardano-Installation`
 - terminal:~$ `git checkout v8.9.0`
 
-#### From source
+#### Config for source upgrade
 
 - terminal:~$ `nano upgrade-cardano-node.sh`
 - terminal:~$ `nano upgrade-genesis-files.sh`
 
-#### From binaries
+#### Config for binaries upgrade
 
 - terminal:~$ `nano upgrade-cardano-node-binaries.sh`
 - terminal:~$ `nano upgrade-genesis-files.sh`
