@@ -55,6 +55,10 @@ CNODE='relay'
 
 ### Update Configuration files from Cardano "Configuration Files" Official release: (Required)
 
+- terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
+- terminal:~$ `cd Cardano-Installation`
+- terminal:~$ `git checkout v8.9.0`
+
 - terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.9.X" line with the correct version number.)
 - terminal:~$ `nano upgrade-genesis-files.sh` (Edit: CNODE_VERSION="8.9.X"s, NETWORK='mainnet', CNODE='relay' lines with the intended values.)
 
