@@ -45,6 +45,7 @@ CNODE='relay'
 ## Upgrading Cardano Node
 
 ```bash
+# Set settings variables before running upgrade-genesis-files.sh.
 # The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 # Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
 CNODE_VERSION="8.9.0"
@@ -69,10 +70,12 @@ nano upgrade-genesis-files.sh
 
 ### Upgrading Steps (Upgrading from source.)
 
-0. terminal:~$ ```bash sudo systemctl stop cnode```
-1. terminal:~$ `./upgrade-cardano-node.sh`
-2. terminal:~$ `./upgrade-genesis-files.sh`
-4. terminal:~$ `sudo systemctl start cnode`
+```bash
+sudo systemctl stop cnode
+./upgrade-cardano-node.sh
+./upgrade-genesis-files.sh
+sudo systemctl start cnode
+```
 
 ### Upgrading Steps (Upgrading from binaries.)
 
