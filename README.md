@@ -59,15 +59,27 @@ CNODE='relay'
 - terminal:~$ `cd Cardano-Installation`
 - terminal:~$ `git checkout v8.9.0`
 
-- terminal:~$ `nano upgrade-cardano-node.sh` (Edit: CNODE_VERSION="8.9.X" line with the correct version number.)
-- terminal:~$ `nano upgrade-genesis-files.sh` (Edit: CNODE_VERSION="8.9.X"s, NETWORK='mainnet', CNODE='relay' lines with the intended values.)
+#### From source
 
-- Visit https://book.world.dev.cardano.org/environments.html for references.
+- terminal:~$ `nano upgrade-cardano-node.sh`
+- terminal:~$ `nano upgrade-genesis-files.sh`
+
+#### From binaries
+
+- terminal:~$ `nano upgrade-cardano-node-binaries.sh`
+- terminal:~$ `nano upgrade-genesis-files.sh`
 
 ### Upgrading Steps (Upgrading from source.)
 
 0. terminal:~$ `sudo systemctl stop cnode`
 1. terminal:~$ `./upgrade-cardano-node.sh`
+2. terminal:~$ `./upgrade-genesis-files.sh`
+4. terminal:~$ `sudo systemctl start cnode`
+
+### Upgrading Steps (Upgrading from binaries.)
+
+0. terminal:~$ `sudo systemctl stop cnode`
+1. terminal:~$ `./upgrade-cardano-node-binaries.sh`
 2. terminal:~$ `./upgrade-genesis-files.sh`
 4. terminal:~$ `sudo systemctl start cnode`
 
@@ -81,6 +93,8 @@ CNODE='relay'
 **DO NOT run upgrade-cardano-node.sh as sudo; the prompt will ask for sudo credentials.**
 
 ## References:
+
+Visit https://book.world.dev.cardano.org/environments.html for references.
 
 https://github.com/input-output-hk/cardano-node/releases
 
