@@ -46,7 +46,7 @@ CNODE='relay'
 
 ```bash
 # Set settings variables before running upgrade-genesis-files.sh.
-# The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
+# The below steps assume a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 # Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
 CNODE_VERSION="8.9.0"
 NETWORK='mainnet'
