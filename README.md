@@ -64,23 +64,27 @@ nano /opt/cardano/cnode/files/config.json
 
 ### Update Configuration files from Cardano "Configuration Files" Official release: (Required)
 
-- terminal:~$ ```git clone https://github.com/MonedaCloud/Cardano-Installation.git```
-- terminal:~$ `cd Cardano-Installation`
-- terminal:~$ `git checkout v8.9.0`
+```bash
+git clone https://github.com/MonedaCloud/Cardano-Installation.git
+cd Cardano-Installation
+git checkout v8.9.0
+```
 
 #### Config for source upgrade
 
-- terminal:~$ `nano upgrade-cardano-node.sh`
-- terminal:~$ `nano upgrade-genesis-files.sh`
+```bash
+nano upgrade-genesis-files.sh
+```
 
 #### Config for binaries upgrade
 
-- terminal:~$ `nano upgrade-cardano-node-binaries.sh`
-- terminal:~$ `nano upgrade-genesis-files.sh`
+```bash
+nano upgrade-genesis-files.sh
+```
 
 ### Upgrading Steps (Upgrading from source.)
 
-0. terminal:~$ `sudo systemctl stop cnode`
+0. terminal:~$ ```bash sudo systemctl stop cnode```
 1. terminal:~$ `./upgrade-cardano-node.sh`
 2. terminal:~$ `./upgrade-genesis-files.sh`
 4. terminal:~$ `sudo systemctl start cnode`
