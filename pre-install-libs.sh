@@ -94,12 +94,12 @@ echo "2. Setting up $MODE on $NETWORK"
 cd ~/src
 git clone --recurse-submodules https://github.com/cardano-community/cncli
 cd cncli
-git checkout v5.3.2
+git checkout v6.1.0
 cargo install --path . --force
 cncli --version
 # Run Guild deploy script:
 cd ~/src
-./guild-deploy.sh -n "$NETWORK" -s f,c
+./guild-deploy.sh -n "$NETWORK" -s fc
 ;;
 *)
 echo "MODE: RELAY|NODE \n NETWORK: mainnet|preprod"
