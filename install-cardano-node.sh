@@ -7,13 +7,16 @@
 # https://github.com/input-output-hk/cardano-node/releases
 
 # Cardano Node Release:
-CNODE_VERSION="8.9.0"
+CNODE_VERSION="9.0.0"
 
 # Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
 
 # Cardano installation file path:
 CNODE_FILES='/opt/cardano/cnode/files'
+
+# Cardano installation cnode scripts path:
+CNODE_SCRIPTS='/opt/cardano/cnode/scripts'
 
 # Local Cardano Genesis files path:
 LOCAL_FILES="`pwd`"
@@ -39,7 +42,7 @@ cabal configure -O0 -w ghc-8.10.7
 echo -e "package cardano-crypto-praos\n flags: -external-libsodium-vrf" >> cabal.project.local
 
 # Build release command
-cabal build all
+# cabal build all
 cabal build cardano-cli
 cabal build cardano-node
 
@@ -60,6 +63,7 @@ cp $CNODE_FILES/byron-genesis.json $CNODE_FILES/byron-genesis.json.bk_pre_$CNODE
 cp $CNODE_FILES/shelley-genesis.json $CNODE_FILES/shelley-genesis.json.bk_pre_$CNODE_VERSION
 cp $CNODE_FILES/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json.bk_pre_$CNODE_VERSION
 cp $CNODE_FILES/conway-genesis.json $CNODE_FILES/conway-genesis.json.bk_pre_$CNODE_VERSION
+cp $CNODE_SCRIPTS/env $CNODE_SCRIPTS/env_pre_$CNODE_VERSION
 
 # Update blockchain genesis files:
 cd $LOCAL_FILES
@@ -69,6 +73,7 @@ cp ./opt/cardano/cnode/files/$NETWORK/byron-genesis.json $CNODE_FILES/byron-gene
 cp ./opt/cardano/cnode/files/$NETWORK/shelley-genesis.json $CNODE_FILES/shelley-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/conway-genesis.json $CNODE_FILES/conway-genesis.json
+cp ./opt/cardano/cnode/scripts/$NETWORK/env $CNODE_SCRIPTS/env
 
 # Get pre-configured mainnet node config.json file without P2P and logging settings enabled:
 if [[ "$CNODE" == "node" && "$NETWORK" == "mainnet" ]]; then
@@ -83,7 +88,7 @@ fi
 # Start/restart Cardano node service:
 sudo systemctl restart cnode
 
-# Run systemd deploy script:
+# Run systemd deploy script from Guild Operators:
 cd /opt/cardano/cnode/scripts
 ./deploy-as-systemd.sh
 

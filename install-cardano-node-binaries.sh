@@ -7,13 +7,16 @@
 # https://github.com/input-output-hk/cardano-node/releases
 
 # Cardano Node Release:
-CNODE_VERSION="8.9.0"
+CNODE_VERSION="9.0.0"
 
 # Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
 
 # Cardano installation file path:
 CNODE_FILES='/opt/cardano/cnode/files'
+
+# Cardano installation cnode scripts path:
+CNODE_SCRIPTS='/opt/cardano/cnode/scripts'
 
 # Local Cardano Genesis files path:
 LOCAL_FILES="`pwd`"
@@ -52,6 +55,7 @@ cp $CNODE_FILES/byron-genesis.json $CNODE_FILES/byron-genesis.json.bk_pre_$CNODE
 cp $CNODE_FILES/shelley-genesis.json $CNODE_FILES/shelley-genesis.json.bk_pre_$CNODE_VERSION
 cp $CNODE_FILES/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json.bk_pre_$CNODE_VERSION
 cp $CNODE_FILES/conway-genesis.json $CNODE_FILES/conway-genesis.json.bk_pre_$CNODE_VERSION
+cp $CNODE_SCRIPTS/env $CNODE_SCRIPTS/env_pre_$CNODE_VERSION
 
 # Update blockchain genesis files:
 cd $LOCAL_FILES
@@ -61,6 +65,7 @@ cp ./opt/cardano/cnode/files/$NETWORK/byron-genesis.json $CNODE_FILES/byron-gene
 cp ./opt/cardano/cnode/files/$NETWORK/shelley-genesis.json $CNODE_FILES/shelley-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/conway-genesis.json $CNODE_FILES/conway-genesis.json
+cp ./opt/cardano/cnode/scripts/$NETWORK/env $CNODE_SCRIPTS/env
 
 # Get pre-configured mainnet node config.json file without P2P and logging settings enabled:
 if [[ "$CNODE" == "node" && "$NETWORK" == "mainnet" ]]; then
@@ -79,7 +84,7 @@ cd /opt/cardano/cnode/scripts
 echo 'alias env=/usr/bin/env
 alias cntools=/opt/cardano/cnode/scripts/cntools.sh
 alias gLiveView=/opt/cardano/cnode/scripts/gLiveView.sh
-export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node0.socket"
+export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node.socket"
 export PATH="/opt/cardano/cnode/scripts:/$HOME/.cabal/bin:$PATH"
 export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
 . "${HOME}/.bashrc"

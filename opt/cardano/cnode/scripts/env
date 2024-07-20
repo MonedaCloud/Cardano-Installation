@@ -986,12 +986,12 @@ else
   BYRON_GENESIS_JSON="${CONFIG_CONTENTS[1]}"
   GENESIS_JSON="${CONFIG_CONTENTS[2]}"
   # if relative path is used, assume same parent dir as config
-  [[ ! ${CONWAY_GENESIS_JSON} =~ ^/ ]] && CONWAY_GENESIS_JSON="$(dirname "${CONFIG}")/${CONWAY_GENESIS_JSON}"
+  #[[ ! ${CONWAY_GENESIS_JSON} =~ ^/ ]] && CONWAY_GENESIS_JSON="$(dirname "${CONFIG}")/${CONWAY_GENESIS_JSON}"
   [[ ! ${ALONZO_GENESIS_JSON} =~ ^/ ]] && ALONZO_GENESIS_JSON="$(dirname "${CONFIG}")/${ALONZO_GENESIS_JSON}"
   [[ ! ${BYRON_GENESIS_JSON} =~ ^/ ]] && BYRON_GENESIS_JSON="$(dirname "${CONFIG}")/${BYRON_GENESIS_JSON}"
   [[ ! ${GENESIS_JSON} =~ ^/ ]] && GENESIS_JSON="$(dirname "${CONFIG}")/${GENESIS_JSON}"
   # if genesis files not found, exit with rc 1
-  [[ ! -f "${CONWAY_GENESIS_JSON}" ]] && echo "Byron genesis file not found: ${CONWAY_GENESIS_JSON}" && return 1
+  #[[ ! -f "${CONWAY_GENESIS_JSON}" ]] && echo "Byron genesis file not found: ${CONWAY_GENESIS_JSON}" && return 1
   [[ ! -f "${ALONZO_GENESIS_JSON}" ]] && echo "Byron genesis file not found: ${ALONZO_GENESIS_JSON}" && return 1
   [[ ! -f "${BYRON_GENESIS_JSON}" ]] && echo "Byron genesis file not found: ${BYRON_GENESIS_JSON}" && return 1
   [[ ! -f "${GENESIS_JSON}" ]] && echo "Shelley genesis file not found: ${GENESIS_JSON}" && return 1
