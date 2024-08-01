@@ -90,7 +90,7 @@ sudo systemctl restart cnode
 
 # Run systemd deploy script from Guild Operators:
 cd /opt/cardano/cnode/scripts
-./deploy-as-systemd.sh
+./cnode.sh -d
 
 echo 'alias env=/usr/bin/env
 alias cntools=/opt/cardano/cnode/scripts/cntools.sh

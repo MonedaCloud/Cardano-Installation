@@ -8,21 +8,26 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ```bash
 # Adjust settings before proceeding with the installation.
-CNODE_VERSION="8.9.0"
+CNODE_VERSION="8.9.4"
 NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
 ```
 
-**Note:** These steps were successfully tested on Mainnet and Preprod environments with Cardano node version **8.9.0**. These steps are the same for Producer nodes and Relay nodes.
+**Note:** These steps were successfully tested on Mainnet and Preprod environments with Cardano node version **9.0.0**.
 
 - The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
+
+### Adding a sudo-user (node) to run the Cardano node application:
+0. terminal:~$ `sudo adduser node`
+1. terminal:~$ `sudo usermod -aG sudo node`
+2. terminal:~$ `su - node`
 
 ### Option 1: (Installing from Cardano GitHub binaries repository.)
 
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
-2. terminal:~$ `git checkout v8.9.0`
+2. terminal:~$ `git checkout v8.9.4`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node-binaries.sh`
@@ -34,7 +39,7 @@ CNODE='relay'
 
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
-2. terminal:~$ `git checkout v8.9.0`
+2. terminal:~$ `git checkout v8.9.4`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node.sh`
@@ -42,13 +47,18 @@ CNODE='relay'
 9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
+### Configuring firewall: (Required for source and binaries intallation options.)
+0. terminal:~$ `sudo ufw enable`
+1. terminal:~$ `sudo ufw allow 6100/tcp` (Use the port configured in the /opt/cardano/cnode/scripts/env file.)
+2. terminal:~$ `sudo ufw status`
+
 ## Upgrading Cardano Node
 
 ```bash
 # Set settings variables before running upgrade-genesis-files.sh.
 # The below steps assume a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 # Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
-CNODE_VERSION="8.9.0"
+CNODE_VERSION="8.9.4"
 NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
@@ -59,7 +69,7 @@ CNODE='relay'
 ```bash
 git clone https://github.com/MonedaCloud/Cardano-Installation.git
 cd Cardano-Installation
-git checkout v8.9.0
+git checkout v8.9.4
 ```
 
 #### Node/relay Configuration
