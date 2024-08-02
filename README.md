@@ -48,9 +48,12 @@ CNODE='relay'
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
 
 ### Configuring firewall: (Required for source and binaries intallation options.)
-0. terminal:~$ `sudo ufw enable`
-1. terminal:~$ `sudo ufw allow 6100/tcp` (Use the port configured in the /opt/cardano/cnode/scripts/env file.)
-2. terminal:~$ `sudo ufw status`
+0. terminal:~$ `sudo ufw default deny incoming`
+1. terminal:~$ `sudo ufw default allow outgoing`
+2. terminal:~$ `sudo ufw allow 22/tcp`
+3. terminal:~$ `sudo ufw allow 6000/tcp` (Use the port configured in the /opt/cardano/cnode/scripts/env file.)
+4. terminal:~$ `sudo ufw enable`
+5. terminal:~$ `sudo ufw status`
 
 ## Upgrading Cardano Node
 
