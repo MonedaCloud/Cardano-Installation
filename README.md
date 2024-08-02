@@ -87,7 +87,7 @@ nano upgrade-genesis-files.sh
 sudo systemctl stop cnode
 ./upgrade-cardano-node.sh
 ./upgrade-genesis-files.sh
-sudo systemctl start cnode
+sudo systemctl restart cnode
 ```
 
 ### Upgrading Steps (Upgrading from binaries.)
@@ -96,7 +96,7 @@ sudo systemctl start cnode
 sudo systemctl stop cnode
 ./upgrade-cardano-node-binaries.sh
 ./upgrade-genesis-files.sh
-sudo systemctl start cnode
+sudo systemctl restart cnode
 ```
 
 - Disable P2P feature for node producers:
