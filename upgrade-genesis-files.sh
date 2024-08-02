@@ -36,7 +36,7 @@ cp ./opt/cardano/cnode/files/$NETWORK/byron-genesis.json $CNODE_FILES/byron-gene
 cp ./opt/cardano/cnode/files/$NETWORK/shelley-genesis.json $CNODE_FILES/shelley-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/conway-genesis.json $CNODE_FILES/conway-genesis.json
-cp ./opt/cardano/cnode/scripts/$NETWORK/env $CNODE_SCRIPTS/env
+cp ./opt/cardano/cnode/scripts/env $CNODE_SCRIPTS/env
 
 # Get pre-configured mainnet node config.json file without P2P:
 if [[ "$CNODE" == "node" && "$NETWORK" == "mainnet" ]]; then

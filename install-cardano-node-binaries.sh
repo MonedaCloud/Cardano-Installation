@@ -7,7 +7,7 @@
 # https://github.com/input-output-hk/cardano-node/releases
 
 # Cardano Node Release:
-CNODE_VERSION="9.0.0"
+CNODE_VERSION="8.9.4"
 
 # Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
@@ -65,7 +65,7 @@ cp ./opt/cardano/cnode/files/$NETWORK/byron-genesis.json $CNODE_FILES/byron-gene
 cp ./opt/cardano/cnode/files/$NETWORK/shelley-genesis.json $CNODE_FILES/shelley-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/alonzo-genesis.json $CNODE_FILES/alonzo-genesis.json
 cp ./opt/cardano/cnode/files/$NETWORK/conway-genesis.json $CNODE_FILES/conway-genesis.json
-cp ./opt/cardano/cnode/scripts/$NETWORK/env $CNODE_SCRIPTS/env
+cp ./opt/cardano/cnode/scripts/env $CNODE_SCRIPTS/env
 
 # Get pre-configured mainnet node config.json file without P2P and logging settings enabled:
 if [[ "$CNODE" == "node" && "$NETWORK" == "mainnet" ]]; then

@@ -71,6 +71,7 @@ Version: 0.3.10
 Cflags: -I\${includedir}
 Libs: -L\${libdir} -lblst
 EOF
+
 sudo cp libblst.pc /usr/local/lib/pkgconfig/
 sudo cp bindings/blst_aux.h bindings/blst.h bindings/blst.hpp  /usr/local/include/
 sudo cp libblst.a /usr/local/lib
