@@ -13,6 +13,9 @@ CNODE_VERSION="8.9.4"
 sudo apt update
 sudo apt upgrade -y
 
+# Stop Cardano node:
+sudo systemctl stop cnode
+
 # Backup
 cp ~/.local/bin/cardano-cli ~/.local/bin/cardano-cli-pre
 cp ~/.local/bin/cardano-node ~/.local/bin/cardano-node-pre
@@ -47,6 +50,11 @@ mv cardano-node2 cardano-node
 cardano-cli --version
 cardano-node --version
 
-sudo systemctl restart cnode
+# Start Cardano node:
+sudo systemctl start cnode
+
+echo 'Run [ systemctl start cnode ] on the terminal to check the status of the Cardano node service.'
+echo 'Run [ journalctl -fu cnode ] on the terminal to monitor for service errors.'
+echo 'Run [ tail -F /opt/cardano/cnode/logs/node0.json ] to follow node logs (Only mainnet configuration).'
 
 echo 'END'

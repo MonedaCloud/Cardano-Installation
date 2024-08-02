@@ -26,6 +26,9 @@ CNODE='relay'
 
 ### DO NOT EDIT BELOW THS LINE. ###
 
+# Stop Cardano node:
+sudo systemctl stop cnode
+
 mkdir -p ~/src
 
 cd ~/src
@@ -99,5 +102,12 @@ export CARDANO_NODE_SOCKET_PATH="/opt/cardano/cnode/sockets/node0.socket"
 export PATH="/opt/cardano/cnode/scripts:/$HOME/.cabal/bin:$PATH"
 export CNODE_HOME=/opt/cardano/cnode' >> ~/.bashrc
 . "${HOME}/.bashrc"
+
+# Start Cardano node:
+sudo systemctl start cnode
+
+echo 'Run [ systemctl start cnode ] on the terminal to check the status of the Cardano node service.'
+echo 'Run [ journalctl -fu cnode ] on the terminal to monitor for service errors.'
+echo 'Run [ tail -F /opt/cardano/cnode/logs/node0.json ] to follow node logs (Only mainnet configuration).'
 
 echo 'END'

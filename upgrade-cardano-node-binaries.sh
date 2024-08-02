@@ -16,6 +16,9 @@ BINARY="https://github.com/IntersectMBO/cardano-node/releases/download/$CNODE_VE
 sudo apt update
 sudo apt upgrade -y
 
+# Stop Cardano node:
+sudo systemctl stop cnode
+
 # Backup
 cp ~/.local/bin/cardano-cli ~/.local/bin/cardano-cli-pre
 cp ~/.local/bin/cardano-node ~/.local/bin/cardano-node-pre
@@ -24,26 +27,26 @@ cp ~/.local/bin/cardano-node ~/.local/bin/cardano-node-pre
 mkdir -p ~/src
 cd ~/src
 rm -rf cardano-node-*
+rm -rf bin
+rm -rf share
 wget $BINARY
-tar -xvzf cardano-node*.tar.gz -C cardano-node2
+tar -xvzf cardano-node*.tar.gz
 
 # Deploy Cardano Node binaries into local bin directory:
 mkdir -p ~/.local/bin
-cp  ./cardano-node2/bin/* ~/.local/bin/
+cp  ./bin/* ~/.local/bin/
 echo 'export PATH="$HOME/.local/bin/:$PATH"' >> ~/.bashrc
 export PATH="$HOME/.local/bin/:$PATH"
 . "${HOME}/.bashrc"
 
-# Clean up
-cd ~/src
-rm -rf cardano-node-old
-
-mv cardano-node cardano-node-old
-mv cardano-node2 cardano-node
-
 cardano-cli --version
 cardano-node --version
 
-sudo systemctl restart cnode
+# Start Cardano node:
+sudo systemctl start cnode
+
+echo 'Run [ systemctl start cnode ] on the terminal to check the status of the Cardano node service.'
+echo 'Run [ journalctl -fu cnode ] on the terminal to monitor for service errors.'
+echo 'Run [ tail -F /opt/cardano/cnode/logs/node0.json ] to follow node logs (Only mainnet configuration).'
 
 echo 'END'
