@@ -2,15 +2,12 @@
 # shellcheck disable=SC2086
 #shellcheck source=/dev/null
 
-. "$(dirname $0)"/env offline
-
 ######################################
 # User Variables - Change as desired #
 # Common variables set in env file   #
 ######################################
 
-# Number of CPU cores cardano-node process has access to (please don't set higher than physical core count, recommended to set atleast to 4)
-CPU_CORES=4
+#CPU_CORES=4              # Number of CPU cores cardano-node process has access to (please don't set higher than physical core count, recommended to set atleast to 4)
 #MEMPOOL_BYTES=8388608    # Override mempool in bytes (Default: Do not override)
 #CNODE_LISTEN_IP4=0.0.0.0 # IP to use for listening (only applicable to Node Connection Port) for IPv4
 #CNODE_LISTEN_IP6=::      # IP to use for listening (only applicable to Node Connection Port) for IPv6
@@ -66,9 +63,9 @@ pre_startup_sanity() {
 mithril_snapshot_download() {
   [[ -z "${MITHRIL_CLIENT}" ]] && MITHRIL_CLIENT="${CNODE_HOME}"/scripts/mithril-client.sh
   if [[ ! -f "${MITHRIL_CLIENT}" ]] || [[ ! -e "${MITHRIL_CLIENT}" ]]; then 
-    echo "ERROR: Could not locate mithril-client.sh script or script is not executable. Skipping mithril snapshot download!!"
+    echo "ERROR: Could not locate mithril-client.sh script or script is not executable. Skipping mithril cardano-db snapshot download!!"
   else
-    "${MITHRIL_CLIENT}" snapshot download
+    "${MITHRIL_CLIENT}" cardano-db download
   fi
 }
 
@@ -123,9 +120,10 @@ while getopts :ds opt; do
   esac
 done
 
+[[ ${0} != '-bash' ]] && PARENT="$(dirname $0)" || PARENT="$(pwd)"
 # Check if env file is missing in current folder (no update checks as will mostly run as daemon), source env if present
-[[ ! -f "$(dirname $0)"/env ]] && echo -e "\nCommon env file missing, please ensure latest guild-deploy.sh was run and this script is being run from ${CNODE_HOME}/scripts folder! \n" && exit 1
-. "$(dirname $0)"/env offline
+[[ ! -f "${PARENT}"/env ]] && echo -e "\nCommon env file missing in \"${PARENT}\", please ensure latest guild-deploy.sh was run and this script is being run from ${CNODE_HOME}/scripts folder! \n" && exit 1
+. "${PARENT}"/env offline
 case $? in
   1) echo -e "ERROR: Failed to load common env file\nPlease verify set values in 'User Variables' section in env file or log an issue on GitHub" && exit 1;;
   2) clear ;;

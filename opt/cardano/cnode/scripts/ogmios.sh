@@ -13,6 +13,7 @@
 #HOSTADDR=127.0.0.1                           # Default Listen IP/Hostname for Ogmios Server
 #HOSTPORT=1337                                # Default Listen port for Ogmios Server
 #LOG_LEVEL=Notice                             # Debug | Info | Notice | Warning | Error | Off
+#CLI_ARGS="--include-cbor"                    # Additional CLI arguments to ogmios
 
 ######################################
 # Do NOT modify code below           #
@@ -38,6 +39,7 @@ set_defaults() {
   [[ -z "${OGMIOSBIN}" ]] && OGMIOSBIN="${HOME}"/.local/bin/ogmios
   [[ -z "${HOSTADDR}" ]] && HOSTADDR=127.0.0.1
   [[ -z "${HOSTPORT}" ]] && HOSTPORT=1337
+  [[ -z "${CLI_ARGS}" ]] && CLI_ARGS="--include-cbor"
   if [[ -z "${LOG_LEVEL}" ]]; then
     LOG_LEVEL=Notice
   else
@@ -80,8 +82,6 @@ deploy_systemd() {
 	ExecStart=/bin/bash -l -c \"exec ${CNODE_HOME}/scripts/ogmios.sh \"
 	KillSignal=SIGINT
 	SuccessExitStatus=143
-	StandardOutput=syslog
-	StandardError=syslog
 	SyslogIdentifier=${CNODE_VNAME}-ogmios
 	TimeoutStopSec=5
 	KillMode=mixed
@@ -121,4 +121,4 @@ fi
 pre_startup_sanity
 
 # Run Ogmios Server
-"${OGMIOSBIN}" --node-config "${CONFIG}" --node-socket "${CARDANO_NODE_SOCKET_PATH}" --host ${HOSTADDR} --port ${HOSTPORT} --log-level ${LOG_LEVEL} >> "${LOG_DIR}"/ogmios.log 2>&1
+"${OGMIOSBIN}" --node-config "${CONFIG}" --node-socket "${CARDANO_NODE_SOCKET_PATH}" --host ${HOSTADDR} --port ${HOSTPORT} ${CLI_ARGS} --log-level ${LOG_LEVEL} >> "${LOG_DIR}"/ogmios.log 2>&1

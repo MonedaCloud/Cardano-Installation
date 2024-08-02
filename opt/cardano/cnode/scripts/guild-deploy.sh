@@ -2,30 +2,30 @@
 # shellcheck disable=SC2086,SC1090,SC2059,SC2016
 # shellcheck source=/dev/null
 
-unset CNODE_HOME
-
 ##########################################
 # User Variables - Change as desired     #
 # command line flags override set values #
 ##########################################
-#G_ACCOUNT="cardano-community"    # Override github GUILD account if you forked the project
-#NETWORK='mainnet'      # Connect to specified network instead of public network (Default: connect to public cardano network)
-#WANT_BUILD_DEPS='Y'    # Skip installing OS level dependencies (Default: will check and install any missing OS level prerequisites)
-#FORCE_OVERWRITE='N'    # Force overwrite of all files including normally saved user config sections in env, cnode.sh and gLiveView.sh
-                        # topology.json, config.json and genesis files normally saved will also be overwritten
-#LIBSODIUM_FORK='Y'     # Use IOG fork of libsodium instead of official repositories - Recommended as per IOG instructions (Default: IOG fork)
-#INSTALL_CNCLI='N'      # Install/Upgrade and build CNCLI with RUST
-#INSTALL_CWHCLI='N'       # Install/Upgrade Vacuumlabs cardano-hw-cli for hardware wallet support
-#INSTALL_OGMIOS='N'     # Install Ogmios Server
-#INSTALL_CSIGNER='N'    # Install/Upgrade Cardano Signer
-#CNODE_NAME='cnode'     # Alternate name for top level folder, non alpha-numeric chars will be replaced with underscore (Default: cnode)
-#CURL_TIMEOUT=60        # Maximum time in seconds that you allow the file download operation to take before aborting (Default: 60s)
-#UPDATE_CHECK='Y'       # Check if there is an updated version of guild-deploy.sh script to download
-#SUDO='Y'               # Used by docker builds to disable sudo, leave unchanged if unsure.
-#SKIP_DBSYNC_DOWNLOAD='N' # When using -i d switch, used by docker builds or users who might not want to download dbsync binary
+#G_ACCOUNT="cardano-community"  # Override github GUILD account if you forked the project
+#NETWORK='mainnet'              # Connect to specified network instead of public network (Default: connect to public cardano network)
+#WANT_BUILD_DEPS='Y'            # Skip installing OS level dependencies (Default: will check and install any missing OS level prerequisites)
+#FORCE_OVERWRITE='N'            # Force overwrite of all config files (topology.json, config.json and genesis files)
+#SCRIPTS_FORCE_OVERWRITE='N'    # Force overwrite of all scripts (including normally saved user config sections in env, cnode.sh and gLiveView.sh)
+#LIBSODIUM_FORK='Y'             # Use IOG fork of libsodium instead of official repositories - Recommended as per IOG instructions (Default: IOG fork)
+#INSTALL_CNCLI='N'              # Install/Upgrade and build CNCLI with RUST
+#INSTALL_CWHCLI='N'             # Install/Upgrade Vacuumlabs cardano-hw-cli for hardware wallet support
+#INSTALL_OGMIOS='N'             # Install Ogmios Server
+#INSTALL_CSIGNER='N'            # Install/Upgrade Cardano Signer
+#CNODE_NAME='cnode'             # Alternate name for top level folder, non alpha-numeric chars will be replaced with underscore (Default: cnode)
+#CURL_TIMEOUT=60                # Maximum time in seconds that you allow the file download operation to take before aborting (Default: 60s)
+#UPDATE_CHECK='Y'               # Check if there is an updated version of guild-deploy.sh script to download
+#SUDO='Y'                       # Used by docker builds to disable sudo, leave unchanged if unsure.
+#SKIP_DBSYNC_DOWNLOAD='N'       # When using -i d switch, used by docker builds or users who might not want to download dbsync binary
 ######################################
 # Do NOT modify code below           #
 ######################################
+
+unset CNODE_HOME
 
 PARENT="$(dirname $0)"
 
@@ -36,7 +36,7 @@ PARENT="$(dirname $0)"
 
 get_answer() {
   printf "%s (yes/no): " "$*" >&2; read -r answer
-  while : 
+  while :
   do
     case $answer in
     [Yy]*)
@@ -61,7 +61,7 @@ versionCheck() { printf '%s\n%s' "${1//v/}" "${2//v/}" | sort -C -V; } #$1=avail
 usage() {
   cat <<-EOF >&2
 		
-		Usage: $(basename "$0") [-n <mainnet|guild|preprod|preview|sanchonet>] [-p path] [-t <name>] [-b <branch>] [-u] [-s [p][b][l][m][f][d][c][o][w][x]]
+		Usage: $(basename "$0") [-n <mainnet|guild|preprod|preview|sanchonet>] [-p path] [-t <name>] [-b <branch>] [-u] [-s [p][b][l][m][d][c][o][w][x][f][s]]
 		Set up dependencies for building/using common tools across cardano ecosystem.
 		The script will always update dynamic content from existing scripts retaining existing user variables
 		
@@ -75,12 +75,13 @@ usage() {
 		  b   Install OS level dependencies for tools required while building cardano-node/cardano-db-sync components (Default: skip)
 		  l   Build and Install libsodium fork from IO repositories (Default: skip)
 		  m   Download latest (released) binaries for mithril-signer, mithril-client (Default: skip)
-		  f   Force overwrite entire content of scripts and config files (backups of existing ones will be created) (Default: skip)
 		  d   Download latest (released) binaries for bech32, cardano-address, cardano-node, cardano-cli, cardano-db-sync and cardano-submit-api (Default: skip)
-		  c   Install/Upgrade CNCLI binary (Default: skip)
-		  o   Install/Upgrade Ogmios Server binary (Default: skip)
-		  w   Install/Upgrade Cardano Hardware CLI (Default: skip)
-		  x   Install/Upgrade Cardano Signer binary (Default: skip)
+		  c   Download latest (released) binaries for CNCLI (Default: skip)
+		  o   Download latest (released) binaries for Ogmios (Default: skip)
+		  w   Download latest (released) binaries for Cardano Hardware CLI (Default: skip)
+		  x   Download latest (released) binaries for Cardano Signer binary (Default: skip)
+		  f   Force overwrite config files (backups of existing ones will be created) (Default: skip)
+		  s   Force overwrite entire content [including user variables] of scripts (Default: skip)
 		
 		EOF
   exit 1
@@ -92,6 +93,7 @@ set_defaults() {
   [[ -z ${NETWORK} ]] && NETWORK='mainnet'
   [[ -z ${WANT_BUILD_DEPS} ]] && WANT_BUILD_DEPS='N'
   [[ -z ${FORCE_OVERWRITE} ]] && FORCE_OVERWRITE='N'
+  [[ -z ${SCRIPTS_FORCE_OVERWRITE} ]] && SCRIPTS_FORCE_OVERWRITE='N'
   [[ -z ${LIBSODIUM_FORK} ]] && LIBSODIUM_FORK='N'
   [[ -z ${INSTALL_MITHRIL} ]] && INSTALL_MITHRIL='N'
   [[ -z ${INSTALL_CNCLI} ]] && INSTALL_CNCLI='N'
@@ -107,9 +109,9 @@ set_defaults() {
   [[ -z "${BRANCH}" ]] && BRANCH="master"
   [[ "${SUDO}" = 'Y' ]] && sudo="sudo" || sudo=""
   [[ "${SUDO}" = 'Y' && $(id -u) -eq 0 ]] && err_exit "Please run as non-root user."
+  [[ -z "${CARDANO_NODE_VERSION}" ]] && CARDANO_NODE_VERSION="$(curl -sfk "https://raw.githubusercontent.com/${G_ACCOUNT}/guild-operators/${BRANCH}/files/docker/node/release-versions/cardano-node-latest.txt")"
   CNODE_HOME="${CNODE_PATH}/${CNODE_NAME}"
   CNODE_VNAME=$(echo "$CNODE_NAME" | awk '{print toupper($0)}')
-  CARDANO_NODE_VERSION="8.7.3"
   REPO="https://github.com/${G_ACCOUNT}/guild-operators"
   REPO_RAW="https://raw.githubusercontent.com/${G_ACCOUNT}/guild-operators"
   URL_RAW="${REPO_RAW}/${BRANCH}"
@@ -155,15 +157,12 @@ update_check() {
 common_init() {
   dirs -c # clear dir stack
   set_defaults
-  mkdir -p "${HOME}"/tmp
+  mkdir -p "${HOME}"/tmp "${HOME}"/git > /dev/null 2>&1
   [[ ! -d "${HOME}"/.local/bin ]] && mkdir -p "${HOME}"/.local/bin
   if ! grep -q '/.local/bin' "${HOME}"/.bashrc; then
     echo -e '\nexport PATH="${HOME}/.local/bin:${PATH}"' >> "${HOME}"/.bashrc
   fi
   NODE_DEPS="$(curl -sfL "${URL_RAW}"/files/node-deps.json)"
-  BLST_REF="$(jq -r '."'${CARDANO_NODE_VERSION}'".blst' <<< ${NODE_DEPS})"
-  SODIUM_REF="$(jq -r '."'${CARDANO_NODE_VERSION}'".secp256k1' <<< ${NODE_DEPS})"
-  SECP256K1_REF="$(jq -r '."'${CARDANO_NODE_VERSION}'".sodium' <<< ${NODE_DEPS})"
 }
 
 ### Update file retaining existing custom configs
@@ -172,7 +171,7 @@ updateWithCustomConfig() {
   [[ $# -ne 2 ]] && subdir="cnode-helper-scripts" || subdir=$2
   curl -s -f -m ${CURL_TIMEOUT} -o ${file}.tmp "${URL_RAW}/scripts/${subdir}/${file}"
   [[ ! -f ${file}.tmp ]] && err_exit "Failed to download '${file}' from GitHub"
-  if [[ -f ${file} && ${FORCE_OVERWRITE} != 'Y' ]]; then
+  if [[ -f ${file} && ${SCRIPTS_FORCE_OVERWRITE} != 'Y' ]]; then
     if grep '^# Do NOT modify' ${file}.tmp >/dev/null 2>&1; then
       TEMPL_CMD=$(awk '/^# Do NOT modify/,0' ${file}.tmp)
       STATIC_CMD=$(awk '/#!/{x=1}/^# Do NOT modify/{exit} x' ${file})
@@ -196,7 +195,7 @@ updateWithCustomConfig() {
 add_epel_repository() {
   if [[ "${1}" =~ Fedora ]]; then return; fi
   echo -e "\n  Enabling epel repository..."
-  ! grep -q ^epel <<< "$(yum repolist)" && $sudo yum ${3} install https://dl.fedoraproject.org/pub/epel/epel-release-latest-"${2}".noarch.rpm > /dev/null
+  ! grep -q ^epel <<< "$(dnf repolist)" && $sudo dnf ${3} install https://dl.fedoraproject.org/pub/epel/epel-release-latest-"${2}".noarch.rpm > /dev/null
 }
 
 # OS Dependencies
@@ -207,14 +206,25 @@ os_dependencies() {
   if [[ "${OS_ID}" =~ ebian ]] || [[ "${OS_ID}" =~ buntu ]] || [[ "${DISTRO}" =~ ebian ]] || [[ "${DISTRO}" =~ buntu ]]; then
     #Debian/Ubuntu
     pkgmgrcmd="env NEEDRESTART_MODE=a env DEBIAN_FRONTEND=noninteractive env DEBIAN_PRIORITY=critical apt-get"
-    pkg_list="python3 pkg-config libssl-dev libncursesw5 libtinfo-dev systemd libsystemd-dev libsodium-dev tmux git jq libtool bc gnupg aptitude libtool secure-delete iproute2 tcptraceroute sqlite3 bsdmainutils libusb-1.0-0-dev libudev-dev unzip llvm clang libnuma-dev libpq-dev build-essential libffi-dev libgmp-dev zlib1g-dev make g++ autoconf automake liblmdb-dev procps"
+    pkg_list="python3 pkg-config systemd tmux git jq libtool bc gnupg libtool iproute2 tcptraceroute sqlite3 bsdmainutils unzip procps xxd"
+    if [[ "${LIBSODIUM_FORK}" == "Y" ]] || [[ "${WANT_BUILD_DEPS}" == "Y" ]]; then
+      pkg_list="${pkg_list} build-essential make g++ autoconf automake"
+    fi
+    if [[ "${WANT_BUILD_DEPS}" == "Y" ]]; then
+      libncurses_pkg="libncursesw5"
+      [[ -f /etc/debian_version ]] && grep -q trixie /etc/debian_version && libncurses_pkg="libncursesw6"
+      pkg_list="${pkg_list} ${libncurses_pkg} libtinfo-dev libnuma-dev libpq-dev liblmdb-dev libffi-dev libgmp-dev libssl-dev libsystemd-dev libsodium-dev zlib1g-dev llvm clang"
+    fi
+    if [[ "${INSTALL_CWHCLI}" == "Y" ]]; then
+      pkg_list="${pkg_list} libusb-1.0-0-dev libudev-dev"
+    fi
   elif [[ "${OS_ID}" =~ rhel ]] || [[ "${OS_ID}" =~ fedora ]] || [[ "${DISTRO}" =~ Fedora ]]; then
     #CentOS/RHEL/Fedora/RockyLinux
-    pkgmgrcmd="yum"
-    pkg_list="python3 coreutils ncurses-devel ncurses-libs openssl-devel systemd systemd-devel libsodium-devel tmux git jq gnupg2 libtool iproute bc traceroute sqlite util-linux xz wget unzip procps-ng llvm clang numactl-devel libffi-devel gmp-devel zlib-devel make gcc-c++ autoconf udev lmdb-devel"
+    pkgmgrcmd="dnf"
+    pkg_list="python3 coreutils systemd tmux git jq gnupg2 libtool iproute bc traceroute sqlite util-linux xz unzip procps-ng udev vim-common"
     if [[ "${VERSION_ID}" == "2" ]] ; then
       #AmazonLinux2
-      pkg_list="${pkg_list} libusb ncurses-compat-libs pkgconfig srm"
+      pkg_list="${pkg_list} libusb ncurses-compat-libs pkgconfig"
     elif [[ "${VERSION_ID}" =~ "8" ]] || [[ "${VERSION_ID}" =~ "9" ]]; then
       #RHEL/CentOS/RockyLinux 8/9
       pkg_opts="${pkg_opts} --allowerasing"
@@ -227,16 +237,15 @@ os_dependencies() {
     elif [[ "${DISTRO}" =~ Fedora ]]; then
       #Fedora
       pkg_opts="${pkg_opts} --allowerasing"
-      pkg_list="${pkg_list} libusbx ncurses-compat-libs pkgconf-pkg-config srm"
+      pkg_list="${pkg_list} libusbx ncurses-compat-libs pkgconf-pkg-config"
+    fi
+    if [[ "${LIBSODIUM_FORK}" == "Y" ]] || [[ "${WANT_BUILD_DEPS}" == "Y" ]]; then
+      pkg_list="${pkg_list} make gcc-c++ autoconf automake"
+    fi
+    if [[ "${WANT_BUILD_DEPS}" == "Y" ]]; then
+      pkg_list="${pkg_list} ncurses-libs ncurses-devel openssl-devel systemd-devel libsodium-devel llvm clang numactl-devel libffi-devel gmp-devel zlib-devel lmdb-devel"
     fi
     add_epel_repository "${DISTRO}" "${VERSION_ID}" "${pkg_opts}"
-    if [ -f /usr/lib64/libtinfo.so ] && [ -f /usr/lib64/libtinfo.so.5 ]; then
-      echo -e "\n  Symlink updates not required for ncurse libs, skipping.."
-    else
-      echo -e "\n  Updating symlinks for ncurse libs.."
-      $sudo ln -s "$(find /usr/lib64/libtinfo.so* | tail -1)" /usr/lib64/libtinfo.so
-      $sudo ln -s "$(find /usr/lib64/libtinfo.so* | tail -1)" /usr/lib64/libtinfo.so.5
-    fi
   else
     echo -e "\nWe have no automated procedures for this ${DISTRO} system"
     err_exit
@@ -254,26 +263,15 @@ os_dependencies() {
     echo -e "\nIt would be best if you could submit an issue at ${REPO} with the details to tackle in future, as some errors may be due to external/already present dependencies"
     err_exit
   fi
-  # Cannot verify the version and availability of libsecp256k1 package built previously, hence have to re-install each time
-  echo -e "\n[Re]-Install libsecp256k1 ..."
-  mkdir -p "${HOME}"/git > /dev/null 2>&1 # To hold git repositories that will be used for building binaries
-  pushd "${HOME}"/git >/dev/null || err_exit
-  [[ ! -d "./secp256k1" ]] && git clone https://github.com/bitcoin-core/secp256k1 &>/dev/null
-  pushd secp256k1 >/dev/null || err_exit
-  git fetch >/dev/null 2>&1
-  [[ -z "${SECP256K1_REF}" ]] && SECP256K1_REF="ac83be33"
-  git checkout ${SECP256K1_REF} &>/dev/null
-  ./autogen.sh > autogen.log > /tmp/secp256k1.log 2>&1
-  ./configure --enable-module-schnorrsig --enable-experimental > configure.log >> /tmp/secp256k1.log 2>&1
-  make > make.log 2>&1 || err_exit " Could not complete \"make\" for libsecp256k1 package, please try to run it manually to diagnose!"
-  make check >>make.log 2>&1
-  $sudo make install > install.log 2>&1
-  if ! grep -q "/usr/local/lib:\$LD_LIBRARY_PATH" "${HOME}"/.bashrc; then
-    echo -e "\nexport LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> "${HOME}"/.bashrc
-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+  if [[ "${OS_ID}" =~ rhel ]] || [[ "${OS_ID}" =~ fedora ]] || [[ "${DISTRO}" =~ Fedora ]]; then
+    if [ -f /usr/lib64/libtinfo.so ] && [ -f /usr/lib64/libtinfo.so.5 ]; then
+      echo -e "\n  Symlink updates not required for ncurse libs, skipping.."
+    else
+      echo -e "\n  Updating symlinks for ncurse libs.."
+      $sudo ln -s "$(find /usr/lib64/libtinfo.so* | tail -1)" /usr/lib64/libtinfo.so
+      $sudo ln -s "$(find /usr/lib64/libtinfo.so* | tail -1)" /usr/lib64/libtinfo.so.5
+    fi
   fi
-  echo -e "\nlibsecp256k1 installed to /usr/local/lib/"
-  build_libblst
 }
 
 # Build Dependencies for cabal builds
@@ -308,11 +306,15 @@ build_dependencies() {
     echo -e "\n Installing Cabal v${BOOTSTRAP_HASKELL_CABAL_VERSION}.."
     ghcup install cabal ${BOOTSTRAP_HASKELL_CABAL_VERSION} >/dev/null 2>&1 || err_exit " Executing \"ghcup install cabal ${BOOTSTRAP_HASKELL_GHC_VERSION}\" failed, please try to diagnose/execute it manually to diagnose!"
   fi
+  build_libsecp
+  build_libblst
 }
 
 # Build fork of libsodium
 build_libsodium() {
+  build_libsecp
   echo -e "\nBuilding libsodium ..."
+  SODIUM_REF="$(jq -r '."'${CARDANO_NODE_VERSION}'".sodium' <<< ${NODE_DEPS})"
   if ! grep -q "/usr/local/lib:\$LD_LIBRARY_PATH" "${HOME}"/.bashrc; then
     echo -e "\nexport LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> "${HOME}"/.bashrc
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -330,8 +332,30 @@ build_libsodium() {
   echo -e "\nIOG fork of libsodium installed to /usr/local/lib/"
 }
 
+build_libsecp() {
+  echo -e "\n[Re]-Install libsecp256k1 ..."
+  SECP256K1_REF="$(jq -r '."'${CARDANO_NODE_VERSION}'".secp256k1' <<< ${NODE_DEPS})"
+  pushd "${HOME}"/git >/dev/null || err_exit
+  [[ ! -d "./secp256k1" ]] && git clone https://github.com/bitcoin-core/secp256k1 &>/dev/null
+  pushd secp256k1 >/dev/null || err_exit
+  git fetch >/dev/null 2>&1
+  [[ -z "${SECP256K1_REF}" ]] && SECP256K1_REF="ac83be33"
+  git checkout ${SECP256K1_REF} &>/dev/null
+  ./autogen.sh > autogen.log > /tmp/secp256k1.log 2>&1
+  ./configure --enable-module-schnorrsig --enable-experimental > configure.log >> /tmp/secp256k1.log 2>&1
+  make > make.log 2>&1 || err_exit " Could not complete \"make\" for libsecp256k1 package, please try to run it manually to diagnose!"
+  make check >>make.log 2>&1
+  $sudo make install > install.log 2>&1
+  if ! grep -q "/usr/local/lib:\$LD_LIBRARY_PATH" "${HOME}"/.bashrc; then
+    echo -e "\nexport LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> "${HOME}"/.bashrc
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+  fi
+  echo -e "\nlibsecp256k1 installed to /usr/local/lib/"
+}
+
 build_libblst() {
   echo -e "\nBuilding BLST..."
+  BLST_REF="$(jq -r '."'${CARDANO_NODE_VERSION}'".blst' <<< ${NODE_DEPS})"
   if ! grep -q "/usr/local/lib:\$LD_LIBRARY_PATH" "${HOME}"/.bashrc; then
     echo -e "\nexport LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> "${HOME}"/.bashrc
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -340,7 +364,7 @@ build_libblst() {
   [[ ! -d "./blst" ]] && git clone https://github.com/supranational/blst &>/dev/null
   pushd blst >/dev/null || err_exit
   git fetch >/dev/null 2>&1
-  [[ -z "${BLST_REF}" ]] && BLST_REF="v0.3.10"
+  [[ -z "${BLST_REF}" ]] && BLST_REF="v0.3.11"
   git checkout ${BLST_REF} &>/dev/null
   ./build.sh >/dev/null 2>&1
   cat <<-EOF >libblst.pc
@@ -364,26 +388,29 @@ build_libblst() {
 }
 
 # Download cardano-node, cardano-cli, cardano-db-sync, bech32 and cardano-submit-api
-# TODO: Replace these with self-hosted ones (potentially consider IPFS as upload destination for CI)
+# TODO: Replace these with self-hosted ones (potentially consider snapshots.koios.rest as upload destination for CI)
 download_cnodebins() {
   [[ -z ${ARCH##*aarch64*} ]] && err_exit "  The build archives are not available for ARM, you might need to build them!"
   echo -e "\nDownloading binaries.."
   pushd "${HOME}"/tmp >/dev/null || err_exit
   echo -e "\n  Downloading Cardano Node archive created from GitHub.."
   rm -f cardano-node cardano-address
-  curl -m 200 -sfL https://github.com/intersectmbo/cardano-node/releases/download/8.7.3/cardano-node-8.7.3-linux.tar.gz -o cnode.tar.gz || err_exit " Could not download cardano-node release 8.7.3 from GitHub!"
-  tar zxf cnode.tar.gz ./cardano-node ./cardano-cli ./cardano-submit-api ./bech32 &>/dev/null
+  curl -m 200 -sfL https://github.com/intersectmbo/cardano-node/releases/download/${CARDANO_NODE_VERSION}/cardano-node-${CARDANO_NODE_VERSION}-linux.tar.gz -o cnode.tar.gz || err_exit " Could not download cardano-node release ${CARDANO_NODE_VERSION} from GitHub!"
+  tar zxf cnode.tar.gz --strip-components 2 ./bin/cardano-node ./bin/cardano-cli ./bin/cardano-submit-api ./bin/bech32 &>/dev/null
   rm -f cnode.tar.gz
   [[ -f cardano-node ]] || err_exit " cardano-node archive downloaded but binary (cardano-node) not found after extracting package!"
   echo -e "\n  Downloading Github release package for Cardano Wallet"
   curl -m 200 -sfL https://github.com/intersectmbo/cardano-addresses/releases/download/3.12.0/cardano-addresses-3.12.0-linux64.tar.gz -o caddress.tar.gz || err_exit " Could not download cardano-wallet's latest release archive from GitHub!"
-  tar zxf caddress.tar.gz --strip-components=1 bin/cardano-address &>/dev/null
+  tar zxf caddress.tar.gz --strip-components 1 bin/cardano-address &>/dev/null
   rm -f caddress.tar.gz
-  [[ -f cardano-address ]] || err_exit " cardano-address archive downloaded but binary (bin/cardano-address) not found after extracting package!"
+  [[ -f cardano-address ]] || err_exit " cardano-address archive downloaded but binary (cardano-address) not found after extracting package!"
   if [[ "${SKIP_DBSYNC_DOWNLOAD}" == "N" ]]; then
     echo -e "\n  Downloading Cardano DB Sync archive created from GitHub.."
-    curl -m 200 -sfL https://github.com/intersectmbo/cardano-db-sync/releases/download/sancho-3-0-0/cardano-db-sync-13.2.0.0-linux.tar.gz -o cnodedbsync.tar.gz || err_exit "  Could not download cardano-db-sync release 13.2.0.0 from GitHub!"
-    tar zxf cnodedbsync.tar.gz ./cardano-db-sync &>/dev/null
+
+    # TODO: Replace CI Build artifact against 13.2.0.2 tag with release from github artefacts once available
+    #curl -m 200 -sfL https://github.com/IntersectMBO/cardano-db-sync/releases/download/13.2.0.2/cardano-db-sync-13.2.0.1-linux.tar.gz -o cnodedbsync.tar.gz || err_exit "  Could not download cardano-db-sync release 13.2.0.2 from GitHub!"
+    curl -m 200 -sfL https://github.com/IntersectMBO/cardano-db-sync/releases/download/13.3.0.0/cardano-db-sync-13.3.0.0-linux.tar.gz -o cnodedbsync.tar.gz || err_exit "  Could not download cardano-db-sync release 13.3.0.0 from GitHub!"
+    tar zxf cnodedbsync.tar.gz --strip-components 1 ./cardano-db-sync &>/dev/null
     [[ -f cardano-db-sync ]] || err_exit " cardano-db-sync archive downloaded but binary (cardano-db-sync) not found after extracting package!"
     rm -f cnodedbsync.tar.gz
     mv -f -t "${HOME}"/.local/bin cardano-db-sync
@@ -397,11 +424,11 @@ download_cncli() {
   [[ -z ${ARCH##*aarch64*} ]] && err_exit "  The cncli pre-compiled binary is not available for ARM, you might need to build them!"
   echo -e "\nInstalling CNCLI.."
   if command -v cncli >/dev/null; then cncli_version="v$(cncli -V 2>/dev/null | cut -d' ' -f2)"; else cncli_version="v0.0.0"; fi
-  cncli_git_version="$(curl -s https://api.github.com/repos/${G_ACCOUNT}/cncli/releases/latest | jq -r '.tag_name')"
+  cncli_git_version="$(curl -s https://api.github.com/repos/cardano-community/cncli/releases/latest | jq -r '.tag_name')"
   echo -e "\n  Downloading CNCLI..."
   rm -rf /tmp/cncli-bin && mkdir /tmp/cncli-bin
   pushd /tmp/cncli-bin >/dev/null || err_exit
-  cncli_asset_url="$(curl -s https://api.github.com/repos/${G_ACCOUNT}/cncli/releases/latest | jq -r '.assets[].browser_download_url' | grep 'ubuntu22.*.linux-musl.tar.gz')"
+  cncli_asset_url="$(curl -s https://api.github.com/repos/cardano-community/cncli/releases/latest | jq -r '.assets[].browser_download_url' | grep 'ubuntu22.*.linux-musl.tar.gz')"
   if curl -sL -f -m ${CURL_TIMEOUT} -o cncli.tar.gz ${cncli_asset_url}; then
     tar zxf cncli.tar.gz &>/dev/null
     rm -f cncli.tar.gz
@@ -614,7 +641,7 @@ populate_cnode() {
   
   pushd "${CNODE_HOME}"/scripts >/dev/null || err_exit
   
-  [[ ${FORCE_OVERWRITE} = 'Y' ]] && echo -e "\nForced full upgrade! Please edit scripts/env, scripts/cnode.sh, scripts/dbsync.sh, scripts/submitapi.sh, scripts/ogmios.sh, scripts/gLiveView.sh and scripts/topologyUpdater.sh scripts/mithril-client.sh scripts/mithril-relay.sh scripts/mithril-signer.sh (alongwith files/topology.json, files/config.json, files/dbsync.json) as required!"
+  [[ ${SCRIPTS_FORCE_OVERWRITE} = 'Y' ]] && echo -e "\nForced full upgrade! Please edit scripts/env, scripts/cnode.sh, scripts/dbsync.sh, scripts/submitapi.sh, scripts/ogmios.sh, scripts/gLiveView.sh and scripts/topologyUpdater.sh scripts/mithril-client.sh scripts/mithril-relay.sh scripts/mithril-signer.sh (alongwith files/topology.json, files/config.json, files/dbsync.json) as required!"
   
   updateWithCustomConfig "blockPerf.sh"
   updateWithCustomConfig "cabal-build-all.sh"
@@ -635,9 +662,10 @@ populate_cnode() {
   updateWithCustomConfig "mithril-client.sh"
   updateWithCustomConfig "mithril-relay.sh"
   updateWithCustomConfig "mithril-signer.sh"
+  updateWithCustomConfig "mithril.library"
   
   find "${CNODE_HOME}/scripts" -name '*.sh' -exec chmod 755 {} \; 2>/dev/null
-  chmod -R 700 "${CNODE_HOME}"/priv 2>/dev/null
+  chmod 750 "${CNODE_HOME}"/priv 2>/dev/null
 }
 
 # Parse arguments supplied to script
@@ -646,13 +674,14 @@ parse_args() {
   if [[ -n "${S_ARGS}" ]]; then
     [[ "${S_ARGS}" =~ "p" ]] && INSTALL_OS_DEPS="Y"
     [[ "${S_ARGS}" =~ "b" ]] && INSTALL_OS_DEPS="Y" && WANT_BUILD_DEPS="Y"
-    [[ "${S_ARGS}" =~ "l" ]] && INSTALL_OS_DEPS="Y" && WANT_BUILD_DEPS="Y" && INSTALL_LIBSODIUM_FORK="Y"
+    [[ "${S_ARGS}" =~ "l" ]] && INSTALL_OS_DEPS="Y" && LIBSODIUM_FORK="Y"
     [[ "${S_ARGS}" =~ "m" ]] && INSTALL_MITHRIL="Y"
-    [[ "${S_ARGS}" =~ "f" ]] && FORCE_OVERWRITE="Y" && POPULATE_CNODE="F"
+    [[ "${S_ARGS}" =~ "f" ]] && FORCE_OVERWRITE="Y" && POPULATE_CNODE="Y"
+    [[ "${S_ARGS}" =~ "s" ]] && SCRIPTS_FORCE_OVERWRITE="Y" && POPULATE_CNODE="Y"
     [[ "${S_ARGS}" =~ "d" ]] && INSTALL_CNODEBINS="Y"
     [[ "${S_ARGS}" =~ "c" ]] && INSTALL_CNCLI="Y"
     [[ "${S_ARGS}" =~ "o" ]] && INSTALL_OGMIOS="Y"
-    [[ "${S_ARGS}" =~ "w" ]] && INSTALL_CWHCLI="Y"
+    [[ "${S_ARGS}" =~ "w" ]] && INSTALL_OS_DEPS="Y" && INSTALL_CWHCLI="Y"
     [[ "${S_ARGS}" =~ "x" ]] && INSTALL_CARDANO_SIGNER="Y"
   else
     echo -e "\nNothing to do.."
@@ -669,9 +698,8 @@ main_flow() {
   [[ "${UPDATE_CHECK}" == "Y" ]] && update_check
   [[ "${INSTALL_OS_DEPS}" == "Y" ]] && os_dependencies
   [[ "${WANT_BUILD_DEPS}" == "Y" ]] && build_dependencies
-  [[ "${INSTALL_LIBSODIUM_FORK}" == "Y" ]] && build_libsodium
+  [[ "${LIBSODIUM_FORK}" == "Y" ]] && build_libsodium
   [[ "${INSTALL_MITHRIL}" == "Y" ]] && download_mithril
-  [[ "${FORCE_OVERWRITE}" == "Y" ]] && POPULATE_CNODE="F" && populate_cnode
   [[ "${POPULATE_CNODE}" == "Y" ]] && populate_cnode
   [[ "${INSTALL_CNODEBINS}" == "Y" ]] && download_cnodebins
   [[ "${INSTALL_CNCLI}" == "Y" ]] && download_cncli

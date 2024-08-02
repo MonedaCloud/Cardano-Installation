@@ -119,11 +119,25 @@ getLedgerData() { # getNodeMetrics expected to have been already run
     echo "ERROR: stake-snapshot query failed: ${stake_snapshot}"
     return 1
   fi
-  pool_stake_mark=$(jq -r .poolStakeMark <<< ${stake_snapshot})
-  active_stake_mark=$(jq -r .activeStakeMark <<< ${stake_snapshot})
-  pool_stake_set=$(jq -r .poolStakeSet <<< ${stake_snapshot})
-  active_stake_set=$(jq -r .activeStakeSet <<< ${stake_snapshot})
+  pool_stake_mark=$(jq -r ".pools[\"${POOL_ID}\"].stakeMark" <<< ${stake_snapshot})
+  active_stake_mark=$(jq -r .total.stakeMark <<< ${stake_snapshot})
+  pool_stake_set=$(jq -r ".pools[\"${POOL_ID}\"].stakeSet" <<< ${stake_snapshot})
+  active_stake_set=$(jq -r .total.stakeSet <<< ${stake_snapshot})
   return 0
+}
+
+getConsensus() {
+  getProtocolParams
+  if versionCheck "9.0" "${PROT_VERSION}"; then
+    consensus="cpraos"
+    stability_window_factor=3
+  elif versionCheck "8.0" "${PROT_VERSION}"; then
+    consensus="praos"
+    stability_window_factor=2
+  else
+    consensus="tpraos"
+    stability_window_factor=2
+  fi
 }
 
 getKoiosData() {
@@ -145,6 +159,7 @@ getKoiosData() {
 
 #################################
 
+# shellcheck disable=SC2120
 cncliInit() {
   if renice_cmd="$(command -v renice)"; then ${renice_cmd} -n 19 $$ >/dev/null; fi
   [[ -z "${BATCH_AUTO_UPDATE}" ]] && BATCH_AUTO_UPDATE=N
@@ -268,20 +283,19 @@ cncliLeaderlog() {
   
   [[ ${subarg} != "force" ]] && echo "Node in sync, sleeping for ${SLEEP_RATE}s before running leaderlogs for current epoch" && sleep ${SLEEP_RATE}
   getNodeMetrics
-  getProtocolParams
-  if versionCheck "8.0" "${PROT_VERSION}"; then consensus="praos"; else consensus="tpraos"; fi
+  getConsensus
   curr_epoch=${epochnum}
   if [[ $(sqlite3 "${BLOCKLOG_DB}" "SELECT COUNT(*) FROM epochdata WHERE epoch=${curr_epoch};" 2>/dev/null) -eq 1 && ${subarg} != "force" ]]; then
     echo "Leaderlogs already calculated for epoch ${curr_epoch}, skipping!"
   else
-    echo "Running leaderlogs for epoch ${curr_epoch} and adding leader slots not already in DB"
+    echo "Running leaderlogs for epoch ${curr_epoch}"
     if [[ ${USE_KOIOS_API} = Y ]]; then 
       getKoiosData || exit 1
     else
       getLedgerData || exit 1
     fi
     stake_param_current="--active-stake ${active_stake_set} --pool-stake ${pool_stake_set}"
-    [[ -z "${nonce_set}" ]] && stake_param_current="${stake_param_current} --nonce ${nonce_set}"
+    [[ -n "${nonce_set}" ]] && stake_param_current="${stake_param_current} --nonce ${nonce_set}"
     cncli_leaderlog=$(${CNCLI} leaderlog --consensus "${consensus}" --db "${CNCLI_DB}" --byron-genesis "${BYRON_GENESIS_JSON}" --shelley-genesis "${GENESIS_JSON}" --ledger-set current ${stake_param_current} --pool-id "${POOL_ID}" --pool-vrf-skey "${POOL_VRF_SKEY}" --tz UTC)
     if [[ $(jq -r .status <<< "${cncli_leaderlog}") != ok ]]; then
       error_msg=$(jq -r .errorMessage <<< "${cncli_leaderlog}")
@@ -308,6 +322,10 @@ cncliLeaderlog() {
 				INSERT OR IGNORE INTO epochdata (epoch, epoch_nonce, pool_id, sigma, d, epoch_slots_ideal, max_performance, active_stake, total_active_stake)
 				VALUES (${curr_epoch}, '${epoch_nonce}', '${pool_id}', '${sigma}', ${d}, ${epoch_slots_ideal}, ${max_performance}, '${active_stake}', '${total_active_stake}');
 				EOF
+      if block_cnt=$(sqlite3 "${BLOCKLOG_DB}" "SELECT COUNT(*) FROM blocklog WHERE epoch=${curr_epoch};" 2>/dev/null) && [[ ${block_cnt} -gt 0 ]]; then
+        echo -e "\nPruning ${block_cnt} entries from blocklog db for epoch ${curr_epoch}\n"
+        sqlite3 "${BLOCKLOG_DB}" "DELETE FROM blocklog WHERE epoch=${curr_epoch};" 2>/dev/null
+      fi
       block_cnt=0
       while read -r assigned_slot; do
         block_slot=$(jq -r '.slot' <<< "${assigned_slot}")
@@ -325,17 +343,18 @@ cncliLeaderlog() {
   while true; do
     [[ ${subarg} != "force" ]] && sleep ${SLEEP_RATE}
     getNodeMetrics
-    getProtocolParams
-    if versionCheck "8.0" "${PROT_VERSION}"; then consensus="praos"; else consensus="tpraos"; fi
+    getConsensus
     if ! cncliDBinSync; then # verify that cncli DB is still in sync
       echo "CNCLI DB out of sync :( [$(printf "%2.4f %%" ${cncli_sync_prog})] ... checking again in ${SLEEP_RATE}s"
       [[ ${subarg} = force ]] && sleep ${SLEEP_RATE}
       continue
     fi
-    slot_for_next_nonce=$(echo "(${slotnum} - ${slot_in_epoch} + ${EPOCH_LENGTH}) - (3 * ${BYRON_K} / ${ACTIVE_SLOTS_COEFF})" | bc) # firstSlotOfNextEpoch - stabilityWindow(3 * k / f)
+    # firstSlotOfNextEpoch - stabilityWindow((3|4) * k / f)
+    # due to issues with timing, calculation is moved one tick to 8/10 of epoch for pre conway, and 7/10 post conway.
+    slot_for_next_nonce=$(echo "(${slotnum} - ${slot_in_epoch} + ${EPOCH_LENGTH}) - (${stability_window_factor} * ${BYRON_K} / ${ACTIVE_SLOTS_COEFF})" | bc)
     curr_epoch=${epochnum}
     next_epoch=$((curr_epoch+1))
-    if [[ ${slotnum} -gt $(( slot_for_next_nonce + 300 )) ]]; then # Run leaderlogs for next epoch (with 5 min delay)
+    if [[ ${slotnum} -gt ${slot_for_next_nonce} ]]; then # Time to run leaderlogs for next epoch?
       if [[ $(sqlite3 "${BLOCKLOG_DB}" "SELECT COUNT(*) FROM epochdata WHERE epoch=${next_epoch};" 2>/dev/null) -eq 1 ]]; then # Leaderlogs already calculated for next epoch, skipping!
         if [[ -t 1 ]]; then # manual execution
           [[ ${subarg} != "force" ]] && echo "Leaderlogs already calculated for epoch ${next_epoch}, skipping!" && break
@@ -348,7 +367,7 @@ cncliLeaderlog() {
         if ! getLedgerData; then sleep 300; continue; fi # Sleep for 5 min before retrying to query stake snapshot in case of error
       fi
       stake_param_next="--active-stake ${active_stake_mark} --pool-stake ${pool_stake_mark}"
-      [[ -z "${nonce_mark}" ]] && stake_param_next="${stake_param_next} --nonce ${nonce_mark}"
+      [[ -n "${nonce_mark}" ]] && stake_param_next="${stake_param_next} --nonce ${nonce_mark}"
       cncli_leaderlog=$(${CNCLI} leaderlog --consensus "${consensus}" --db "${CNCLI_DB}" --byron-genesis "${BYRON_GENESIS_JSON}" --shelley-genesis "${GENESIS_JSON}" --ledger-set next ${stake_param_next} --pool-id "${POOL_ID}" --pool-vrf-skey "${POOL_VRF_SKEY}" --tz UTC)
       if [[ $(jq -r .status <<< "${cncli_leaderlog}") != ok ]]; then
         error_msg=$(jq -r .errorMessage <<< "${cncli_leaderlog}")
@@ -374,6 +393,10 @@ cncliLeaderlog() {
 					INSERT OR IGNORE INTO epochdata (epoch, epoch_nonce, pool_id, sigma, d, epoch_slots_ideal, max_performance, active_stake, total_active_stake)
 					VALUES (${next_epoch}, '${epoch_nonce}', '${pool_id}', '${sigma}', ${d}, ${epoch_slots_ideal}, ${max_performance}, '${active_stake}', '${total_active_stake}');
 					EOF
+        if block_cnt=$(sqlite3 "${BLOCKLOG_DB}" "SELECT COUNT(*) FROM blocklog WHERE epoch=${next_epoch};" 2>/dev/null) && [[ ${block_cnt} -gt 0 ]]; then
+          echo -e "\nPruning ${block_cnt} entries from blocklog db for epoch ${next_epoch}\n"
+          sqlite3 "${BLOCKLOG_DB}" "DELETE FROM blocklog WHERE epoch=${next_epoch};" 2>/dev/null
+        fi
         block_cnt=0
         while read -r assigned_slot; do
           block_slot=$(jq -r '.slot' <<< "${assigned_slot}")
@@ -564,8 +587,8 @@ deployMonitoringAgent() {
     echo -e "Installing socat .."
     if command -v apt-get >/dev/null; then
       sudo apt-get -y install socat >/dev/null || err_exit "'sudo apt-get -y install socat' failed!"
-    elif command -v yum >/dev/null; then
-      sudo yum -y install socat >/dev/null || err_exit "'sudo yum -y install socat' failed!"
+    elif command -v dnf >/dev/null; then
+      sudo dnf -y install socat >/dev/null || err_exit "'sudo dnf -y install socat' failed!"
     else
       err_exit "'socat' not found in \$PATH, needed to for node exporter monitoring!"
     fi
@@ -586,8 +609,6 @@ WorkingDirectory=${CNODE_HOME}/scripts
 ExecStart=/bin/bash -l -c \"exec ${CNODE_HOME}/scripts/cncli.sh metrics serve\"
 KillSignal=SIGINT
 SuccessExitStatus=143
-StandardOutput=syslog
-StandardError=syslog
 SyslogIdentifier=${CNODE_VNAME}_cncli_exporter
 TimeoutStopSec=5
 KillMode=mixed

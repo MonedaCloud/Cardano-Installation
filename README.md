@@ -8,7 +8,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ```bash
 # Adjust settings before proceeding with the installation.
-CNODE_VERSION="8.9.4"
+CNODE_VERSION="9.1.0"
 NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
@@ -27,7 +27,7 @@ CNODE='relay'
 
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
-2. terminal:~$ `git checkout v8.9.4`
+2. terminal:~$ `git checkout v9.1.0`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node-binaries.sh`
@@ -39,7 +39,7 @@ CNODE='relay'
 
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
-2. terminal:~$ `git checkout v8.9.4`
+2. terminal:~$ `git checkout v9.1.0`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node.sh`
@@ -61,7 +61,7 @@ CNODE='relay'
 # Set settings variables before running upgrade-genesis-files.sh.
 # The below steps assume a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 # Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
-CNODE_VERSION="8.9.4"
+CNODE_VERSION="9.1.0"
 NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
@@ -72,7 +72,7 @@ CNODE='relay'
 ```bash
 git clone https://github.com/MonedaCloud/Cardano-Installation.git
 cd Cardano-Installation
-git checkout v8.9.4
+git checkout v9.1.0
 ```
 
 #### Node/relay Configuration
@@ -120,7 +120,7 @@ nano /opt/cardano/cnode/files/config.json
 
 ## References:
 
-Visit https://book.world.dev.cardano.org/environments.html for references.
+https://book.world.dev.cardano.org/environments.html
 
 https://github.com/input-output-hk/cardano-node/releases
 
@@ -134,6 +134,8 @@ https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-star
 
 https://github.com/input-output-hk/cardano-node-wiki/blob/main/docs/getting-started/understanding-config-files.md#light-genesis-aka-bootstrap-peers
 
-https://book.world.dev.cardano.org/environments.html
-
 https://github.com/cardano-community/guild-operators
+
+https://cardano-community.github.io/support-faq/
+
+https://www.coincashew.com/coins/overview-ada
