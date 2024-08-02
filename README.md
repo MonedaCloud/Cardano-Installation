@@ -30,7 +30,7 @@ CNODE='relay'
 2. terminal:~$ `git checkout v9.1.0`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
-7. terminal:~$ `./install-cardano-node-binaries.sh`
+7. terminal:~$ `./install-cardano-node-binaries.sh && source ~/.bashrc`
 8. Configure scripts/env, scripts/cnode.sh, files/topology.json. Check the [configuration-files.md](https://github.com/MonedaCloud/Cardano-Installation/blob/main/configuration-files.md) guide.
 9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
@@ -42,7 +42,7 @@ CNODE='relay'
 2. terminal:~$ `git checkout v9.1.0`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
-7. terminal:~$ `./install-cardano-node.sh`
+7. terminal:~$ `./install-cardano-node.sh && source ~/.bashrc`
 8. Configure scripts/env, scripts/cnode.sh, files/topology.json. Check the configuration-files.md guide.
 9. terminal:~$ `sudo reboot`
 * Node will start automatically right after the reboot. Check the syncing progress with `gLiveView` command.
