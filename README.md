@@ -16,7 +16,7 @@ CNODE='relay'
 
 **Note:** These steps were successfully tested on Mainnet and Preprod environments with Cardano node version **9.0.0**.
 
-- The below steps assume you already have a dedicated OS user with sudo privileges running on Ubuntu 22.04:
+### The below steps assume you already have a dedicated Ubuntu base 20.04/22.04 LTS OS and a user with sudo privileges: (Ubuntu 24.04 is not supported.)
 
 ### Adding a sudo-user (node) to run the Cardano node application:
 0. terminal:~$ `sudo adduser node`
