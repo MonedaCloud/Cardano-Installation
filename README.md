@@ -8,7 +8,7 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ```bash
 # Adjust settings before proceeding with the installation.
-CNODE_VERSION="9.1.0"
+CNODE_VERSION="9.1.1"
 NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
