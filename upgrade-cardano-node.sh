@@ -5,7 +5,7 @@
 ### Run second upgrade-cardano-node.sh script. ###
 
 # Cardano Node Release:
-CNODE_VERSION="9.1.0"
+CNODE_VERSION="9.1.1"
 
 ### DO NOT EDIT BELOW THS LINE. ###
 
