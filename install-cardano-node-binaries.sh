@@ -7,7 +7,7 @@
 # https://github.com/input-output-hk/cardano-node/releases
 
 # Cardano Node Release:
-CNODE_VERSION="9.1.1"
+CNODE_VERSION="9.2.0"
 
 # Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'
