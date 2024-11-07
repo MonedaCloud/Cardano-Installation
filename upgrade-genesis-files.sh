@@ -5,7 +5,7 @@
 ### Run second upgrade-cardano-node.sh script. ###
 
 # Cardano Node Release:
-CNODE_VERSION="9.2.0"
+CNODE_VERSION="9.2.1"
 
 # Values: mainnet|preprod|preview|sanchonet
 NETWORK='mainnet'

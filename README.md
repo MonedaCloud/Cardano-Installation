@@ -8,13 +8,13 @@ This repo contains scripts and installation steps for Cardano node as a block pr
 
 ```bash
 # Adjust settings before proceeding with the installation.
-CNODE_VERSION="9.2.0"
+CNODE_VERSION="9.2.1"
 NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
 ```
 
-**Note:** These steps were successfully tested on Mainnet and Preprod environments with Cardano node version **9.2.0**.
+**Note:** These steps were successfully tested on Mainnet and Preprod environments with Cardano node version **9.2.1**.
 
 ### The below steps assume you already have a dedicated Ubuntu base 20.04/22.04 LTS OS and a user with sudo privileges: (Ubuntu 24.04 is not supported.)
 
@@ -27,7 +27,7 @@ CNODE='relay'
 
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
-2. terminal:~$ `git checkout v9.2.0`
+2. terminal:~$ `git checkout v9.2.1`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node-binaries.sh && source ~/.bashrc`
@@ -39,7 +39,7 @@ CNODE='relay'
 
 0. terminal:~$ `git clone https://github.com/MonedaCloud/Cardano-Installation.git`
 1. terminal:~$ `cd Cardano-Installation`
-2. terminal:~$ `git checkout v9.2.0`
+2. terminal:~$ `git checkout v9.2.1`
 3. terminal:~$ `./pre-install-os.sh && source ~/.bashrc` (Accept defaults by hitting [ENTER])
 5. terminal:~$ `./pre-install-libs.sh && source ~/.bashrc`
 7. terminal:~$ `./install-cardano-node.sh && source ~/.bashrc`
@@ -61,7 +61,7 @@ CNODE='relay'
 # Set settings variables before running upgrade-genesis-files.sh.
 # The below steps assume a dedicated OS user with sudo privileges running on Ubuntu 22.04:
 # Default upgrade settings: (Adjust settings before proceeding with the upgrade.)
-CNODE_VERSION="9.2.0"
+CNODE_VERSION="9.2.1"
 NETWORK='mainnet'
 CNODE_FILES='/opt/cardano/cnode/files'
 CNODE='relay'
@@ -72,7 +72,7 @@ CNODE='relay'
 ```bash
 git clone https://github.com/MonedaCloud/Cardano-Installation.git
 cd Cardano-Installation
-git checkout v9.2.0
+git checkout v9.2.1
 ```
 
 #### Node/relay Configuration
